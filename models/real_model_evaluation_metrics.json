@@ -1,0 +1,81 @@
+{
+  "evaluation_timestamp": "2026-09-18T17:58:16.506365",
+  "sample_metadata": {
+    "train_rows": 420,
+    "test_rows": 140,
+    "validation_type": "Time-Blocked Out-of-Time Holdout (July 15, 2019)",
+    "data_source": "NOAA GEFS v12 Reforecast (AWS S3) + ERA5 Reanalysis"
+  },
+  "main_model_metrics": {
+    "model": "CalibratedRandomForest(n_estimators=150, max_depth=6, sigmoid_calibrated)",
+    "roc_auc": 0.9924,
+    "pr_auc": 0.9108,
+    "brier_score": 0.0217,
+    "precision": 0.6923,
+    "recall": 1.0,
+    "f1": 0.8182,
+    "confusion_matrix": [
+      [
+        127,
+        4
+      ],
+      [
+        0,
+        9
+      ]
+    ]
+  },
+  "baseline_model_metrics": {
+    "model": "BaselineLogisticRegression(class_weight=balanced)",
+    "roc_auc": 0.9949,
+    "pr_auc": 0.9436,
+    "brier_score": 0.0261,
+    "precision": 0.6923,
+    "recall": 1.0,
+    "f1": 0.8182,
+    "confusion_matrix": [
+      [
+        127,
+        4
+      ],
+      [
+        0,
+        9
+      ]
+    ]
+  },
+  "calibration_curve": {
+    "mean_predicted_probabilities": [
+      0.008,
+      0.544,
+      0.752,
+      0.861
+    ],
+    "true_fraction_positives": [
+      0.0,
+      1.0,
+      0.0,
+      0.727
+    ]
+  },
+  "feature_importances": {
+    "lead_time_days": 0.001973841925286625,
+    "temp_forecast": 0.005049794417989822,
+    "precip_forecast": 0.058849722251362514,
+    "mslp": 0.016809874036837275,
+    "pressure_tendency_24h": 0.092624555523095,
+    "rh_850": 0.005957769125750927,
+    "wind_shear_850_200": 0.006244736949106871,
+    "cape_j_kg": 0.28168820513684617,
+    "ensemble_spread": 0.1880294228631147,
+    "instability_index": 0.26691218680268053,
+    "lead_decay_factor": 8.50893111597209e-05,
+    "baroclinic_gradient": 0.07577480165676993
+  },
+  "operational_thresholds": {
+    "high_confidence_bust_max": 0.25,
+    "medium_confidence_bust_max": 0.5,
+    "low_confidence_bust_min": 0.5,
+    "severe_risk_bust_min": 0.75
+  }
+}

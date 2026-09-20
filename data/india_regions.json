@@ -1,0 +1,158 @@
+{
+  "regions": [
+    {
+      "id": "IND-NW-HIM",
+      "name": "Western Himalayas",
+      "states": "Jammu & Kashmir, Ladakh, Himachal Pradesh, Uttarakhand",
+      "zone": "North",
+      "centroid": [34.0, 76.5],
+      "svg_path": "M 230 40 L 290 30 L 330 65 L 350 110 L 305 130 L 260 115 L 210 90 L 195 60 Z",
+      "climate_risk": "Western Disturbances, abrupt orographic snow/rain, cloudbursts",
+      "baseline_temp": 12.5,
+      "baseline_rain": 4.2
+    },
+    {
+      "id": "IND-NW-PLN",
+      "name": "Indo-Gangetic NW Plains",
+      "states": "Punjab, Haryana, Delhi, Western UP",
+      "zone": "North",
+      "centroid": [29.5, 76.8],
+      "svg_path": "M 210 90 L 260 115 L 275 160 L 230 180 L 185 145 L 195 110 Z",
+      "climate_risk": "Dense fog inversions, dust storms, convective squall lines (Andhi)",
+      "baseline_temp": 28.0,
+      "baseline_rain": 2.5
+    },
+    {
+      "id": "IND-RAJ",
+      "name": "Rajasthan (Arid & Semi-Arid)",
+      "states": "East & West Rajasthan",
+      "zone": "West",
+      "centroid": [26.5, 72.5],
+      "svg_path": "M 130 135 L 185 145 L 230 180 L 210 240 L 140 230 L 115 170 Z",
+      "climate_risk": "Severe heatwaves, abrupt cyclonic track recurvature from Arabian Sea",
+      "baseline_temp": 34.5,
+      "baseline_rain": 1.2
+    },
+    {
+      "id": "IND-GUJ",
+      "name": "Gujarat & Saurashtra",
+      "states": "Gujarat, Saurashtra, Kutch",
+      "zone": "West",
+      "centroid": [22.5, 71.2],
+      "svg_path": "M 115 230 L 175 235 L 185 285 L 145 315 L 90 290 L 75 250 Z",
+      "climate_risk": "Arabian Sea cyclonic landfalls, monsoon depression stagnation",
+      "baseline_temp": 31.0,
+      "baseline_rain": 3.8
+    },
+    {
+      "id": "IND-UP-BIH",
+      "name": "Middle Gangetic Plains",
+      "states": "Eastern UP, Bihar",
+      "zone": "East",
+      "centroid": [26.0, 84.0],
+      "svg_path": "M 275 160 L 375 155 L 390 215 L 320 230 L 270 210 L 275 160 Z",
+      "climate_risk": "Monsoon trough oscillations, localized heavy thunderstorm outbursts",
+      "baseline_temp": 29.5,
+      "baseline_rain": 6.5
+    },
+    {
+      "id": "IND-NE",
+      "name": "Northeast India",
+      "states": "Assam, Meghalaya, Arunachal, Nagaland, Manipur, Mizoram",
+      "zone": "Northeast",
+      "centroid": [26.2, 92.9],
+      "svg_path": "M 425 150 L 515 135 L 560 170 L 525 240 L 465 240 L 435 200 Z",
+      "climate_risk": "Orographic precipitation extremes, Brahmaputra flood surges",
+      "baseline_temp": 24.0,
+      "baseline_rain": 16.5
+    },
+    {
+      "id": "IND-WB-ODI",
+      "name": "East Coast (Bengal & Odisha)",
+      "states": "Gangetic West Bengal, Odisha",
+      "zone": "East",
+      "centroid": [21.5, 86.0],
+      "svg_path": "M 355 220 L 425 210 L 415 295 L 345 320 L 335 260 Z",
+      "climate_risk": "Bay of Bengal deep depressions, rapid cyclogenesis, coastal surge",
+      "baseline_temp": 29.0,
+      "baseline_rain": 11.2
+    },
+    {
+      "id": "IND-CEN-MP",
+      "name": "Central India (MP & Chhattisgarh)",
+      "states": "Madhya Pradesh, Chhattisgarh",
+      "zone": "Central",
+      "centroid": [23.0, 79.5],
+      "svg_path": "M 215 210 L 325 215 L 345 320 L 270 335 L 210 270 Z",
+      "climate_risk": "Monsoon low-pressure system track divergence, convective instability",
+      "baseline_temp": 30.5,
+      "baseline_rain": 7.8
+    },
+    {
+      "id": "IND-MAH-DESH",
+      "name": "Maharashtra Interior & Vidarbha",
+      "states": "Madhya Maharashtra, Marathwada, Vidarbha",
+      "zone": "West-Central",
+      "centroid": [19.5, 76.0],
+      "svg_path": "M 185 285 L 270 300 L 295 380 L 210 405 L 180 345 Z",
+      "climate_risk": "Rainshadow drought, unseasonal hailstorms, pre-monsoon squalls",
+      "baseline_temp": 32.0,
+      "baseline_rain": 4.5
+    },
+    {
+      "id": "IND-KON-GOA",
+      "name": "Konkan & Goa Coastal Strip",
+      "states": "Konkan, Mumbai, Goa",
+      "zone": "West Coast",
+      "centroid": [16.5, 73.5],
+      "svg_path": "M 160 325 L 185 325 L 185 450 L 155 450 Z",
+      "climate_risk": "Offshore trough bursts, extreme 24h rain episodes (>150mm)",
+      "baseline_temp": 28.5,
+      "baseline_rain": 18.0
+    },
+    {
+      "id": "IND-TEL-AP",
+      "name": "Telangana & Coastal Andhra",
+      "states": "Telangana, Coastal Andhra Pradesh, Rayalaseema",
+      "zone": "South-East",
+      "centroid": [16.5, 80.0],
+      "svg_path": "M 270 335 L 345 320 L 330 455 L 260 445 L 270 375 Z",
+      "climate_risk": "Post-monsoon cyclone landfalls, coastal storm surges, heatwave pockets",
+      "baseline_temp": 31.5,
+      "baseline_rain": 6.8
+    },
+    {
+      "id": "IND-KAR",
+      "name": "Karnataka Interior",
+      "states": "North & South Interior Karnataka",
+      "zone": "South",
+      "centroid": [14.5, 76.0],
+      "svg_path": "M 185 410 L 260 420 L 245 520 L 185 500 Z",
+      "climate_risk": "Orographic rainshadow gradient, microburst convective showers",
+      "baseline_temp": 27.5,
+      "baseline_rain": 5.4
+    },
+    {
+      "id": "IND-KER",
+      "name": "Kerala Coast & High Ranges",
+      "states": "Kerala",
+      "zone": "South Coast",
+      "centroid": [10.2, 76.5],
+      "svg_path": "M 180 505 L 205 505 L 210 610 L 185 595 Z",
+      "climate_risk": "Monsoon onset vortex, intense orographic cloud bursts, landslides",
+      "baseline_temp": 27.0,
+      "baseline_rain": 19.5
+    },
+    {
+      "id": "IND-TN",
+      "name": "Tamil Nadu & Puducherry",
+      "states": "Tamil Nadu, Puducherry",
+      "zone": "South",
+      "centroid": [11.0, 78.5],
+      "svg_path": "M 210 505 L 275 480 L 270 590 L 215 615 Z",
+      "climate_risk": "Northeast Monsoon depressions, extreme coastal cyclonic downpours",
+      "baseline_temp": 29.8,
+      "baseline_rain": 8.1
+    }
+  ]
+}

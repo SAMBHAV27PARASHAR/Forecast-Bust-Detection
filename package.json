@@ -1,0 +1,13 @@
+{
+  "name": "sih26079-root",
+  "private": true,
+  "description": "AI-Based Forecast Bust Detection for Medium-Range Weather Forecasts (SIH 26079)",
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "backend": "python -m uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload"
+  }
+}
