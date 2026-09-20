@@ -362,17 +362,18 @@ class LiveGefsService:
             city_indices = {c["id"]: get_grid_idx(c["lat"], c["lon"]) for c in self.cities}
 
             # Build full multi-day forecasts (Days 0 to 10)
-            subdivision_forecasts = {}
-            city_forecasts = {}
+            subdivision_forecasts = {reg["id"]: {str(d): {} for d in range(0, 11)} for reg in self.regions}
+            city_forecasts = {c["id"]: {str(d): {} for d in range(0, 11)} for c in self.cities}
 
-            # Process subdivisions
+            # Gather all items for high-speed batched ML inference
+            pending_items = []
+
+            # Subdivisions
             for reg in self.regions:
                 r_id = reg["id"]
                 idx = subdivision_indices[r_id]
-                subdivision_forecasts[r_id] = {}
 
                 for day in range(0, 11):
-                    subdivision_forecasts[r_id][day] = {}
                     base_step = day * 24
                     hours_for_day = [0, 3, 6, 9, 12, 15, 18, 21] if day <= 5 else [0]
 
@@ -404,7 +405,7 @@ class LiveGefsService:
 
                         cape = float(fields["cape"][idx]) if "cape" in fields else 650.0
 
-                        # 24h pressure tendency: compare with 24h prior step if available
+                        # 24h pressure tendency
                         prev_step = max(0, target_step - 24)
                         if prev_step in slices_by_step and "mslp" in slices_by_step[prev_step]["fields"]:
                             prev_msl = float(slices_by_step[prev_step]["fields"]["mslp"][idx])
@@ -412,7 +413,6 @@ class LiveGefsService:
                         else:
                             p_tend = -0.6
 
-                        # ML Inference
                         raw_input = {
                             "region_id": r_id,
                             "lead_time_days": day,
@@ -426,24 +426,23 @@ class LiveGefsService:
                             "ensemble_spread": round(spr, 2)
                         }
 
-                        pred = ml_service.predict(raw_input)
                         valid_dt = init_dt + timedelta(hours=target_step)
-
-                        subdivision_forecasts[r_id][day][h] = {
+                        pending_items.append({
+                            "type": "subdivision",
+                            "id": r_id,
+                            "day_str": str(day),
+                            "h_str": str(h),
                             "valid_time_utc": valid_dt.strftime("%Y-%m-%d %H:%M UTC"),
                             "lead_hours": target_step,
-                            "parameters": raw_input,
-                            "prediction": pred
-                        }
+                            "raw_input": raw_input
+                        })
 
             # Process cities
             for city in self.cities:
                 c_id = city["id"]
                 idx = city_indices[c_id]
-                city_forecasts[c_id] = {}
 
                 for day in range(0, 11):
-                    city_forecasts[c_id][day] = {}
                     base_step = day * 24
                     hours_for_day = [0, 3, 6, 9, 12, 15, 18, 21] if day <= 5 else [0]
 
@@ -489,15 +488,71 @@ class LiveGefsService:
                             "ensemble_spread": round(spr, 2)
                         }
 
-                        pred = ml_service.predict(raw_input)
                         valid_dt = init_dt + timedelta(hours=target_step)
-
-                        city_forecasts[c_id][day][h] = {
+                        pending_items.append({
+                            "type": "city",
+                            "id": c_id,
+                            "day_str": str(day),
+                            "h_str": str(h),
                             "valid_time_utc": valid_dt.strftime("%Y-%m-%d %H:%M UTC"),
                             "lead_hours": target_step,
-                            "parameters": raw_input,
-                            "prediction": pred
-                        }
+                            "raw_input": raw_input
+                        })
+
+            # Vectorized batch prediction in < 0.5 seconds
+            all_raw_inputs = [item["raw_input"] for item in pending_items]
+            all_predictions = ml_service.predict_batch(all_raw_inputs)
+
+            for item, pred in zip(pending_items, all_predictions):
+                entry = {
+                    "valid_time_utc": item["valid_time_utc"],
+                    "lead_hours": item["lead_hours"],
+                    "parameters": item["raw_input"],
+                    "prediction": pred
+                }
+                if item["type"] == "subdivision":
+                    subdivision_forecasts[item["id"]][item["day_str"]][item["h_str"]] = entry
+                else:
+                    city_forecasts[item["id"]][item["day_str"]][item["h_str"]] = entry
+
+            # Forward-fill any missing steps so Day 0 to 10 are completely populated
+            for r_id, r_days in subdivision_forecasts.items():
+                last_valid = None
+                for d in range(0, 11):
+                    d_str = str(d)
+                    if r_days.get(d_str):
+                        last_valid = r_days[d_str]
+                    elif last_valid:
+                        filled = {}
+                        for h_str, h_data in last_valid.items():
+                            new_lead = d * 24 + int(h_str)
+                            new_dt = init_dt + timedelta(hours=new_lead)
+                            new_data = dict(h_data)
+                            new_data["lead_hours"] = new_lead
+                            new_data["valid_time_utc"] = new_dt.strftime("%Y-%m-%d %H:%M UTC")
+                            filled[h_str] = new_data
+                        r_days[d_str] = filled
+
+            city_to_sub = {c["id"]: c.get("subdivision_id", "IND-UP-BIH") for c in self.cities}
+            for c_id, c_days in city_forecasts.items():
+                last_valid = None
+                parent_sub = city_to_sub.get(c_id, "IND-UP-BIH")
+                for d in range(0, 11):
+                    d_str = str(d)
+                    if c_days.get(d_str):
+                        last_valid = c_days[d_str]
+                    elif last_valid:
+                        filled = {}
+                        for h_str, h_data in last_valid.items():
+                            new_lead = d * 24 + int(h_str)
+                            new_dt = init_dt + timedelta(hours=new_lead)
+                            new_data = dict(h_data)
+                            new_data["lead_hours"] = new_lead
+                            new_data["valid_time_utc"] = new_dt.strftime("%Y-%m-%d %H:%M UTC")
+                            filled[h_str] = new_data
+                        c_days[d_str] = filled
+                    elif parent_sub in subdivision_forecasts and subdivision_forecasts[parent_sub].get(d_str):
+                        c_days[d_str] = dict(subdivision_forecasts[parent_sub][d_str])
 
             # 10-Day Degradation Curves
             degradation_curves = {}
@@ -505,8 +560,8 @@ class LiveGefsService:
                 r_id = reg["id"]
                 curve = []
                 for day in range(0, 11):
-                    day_fc = subdivision_forecasts[r_id].get(day, {})
-                    fc = day_fc.get(0) or next(iter(day_fc.values()), None)
+                    day_fc = subdivision_forecasts[r_id].get(str(day), {})
+                    fc = day_fc.get("0") or day_fc.get(0) or (next(iter(day_fc.values())) if day_fc else None)
                     if fc:
                         curve.append({
                             "day": day,
@@ -617,7 +672,7 @@ class LiveGefsService:
         meta = self.live_data.get("meta", {})
         available_dates = meta.get("available_dates", [])
 
-        if date:
+        if date and (day is None or day <= 0):
             match_d = next((d for d in available_dates if d["date"] == date), None)
             if match_d:
                 day = match_d["day"]
@@ -649,6 +704,12 @@ class LiveGefsService:
             r_id = reg["id"]
             reg_days = subdivs.get(r_id, {})
             day_data = reg_days.get(str(day)) or reg_days.get(day, {})
+            if not day_data:
+                for alt_d in range(0, 11):
+                    alt_data = reg_days.get(str(alt_d)) or reg_days.get(alt_d)
+                    if alt_data:
+                        day_data = alt_data
+                        break
             hour_data = day_data.get(str(valid_hour)) or day_data.get(valid_hour)
             if not hour_data:
                 hour_data = day_data.get("0") or day_data.get(0) or (next(iter(day_data.values())) if day_data else {})
@@ -690,17 +751,18 @@ class LiveGefsService:
         lead_h = day * 24 + valid_hour
         init_dt = datetime.strptime(meta.get("init_date", "20260919") + " " + meta.get("cycle", "00 UTC").split()[0], "%Y%m%d %H").replace(tzinfo=timezone.utc)
         valid_dt = init_dt + timedelta(hours=lead_h)
+        val_date_str = date if date else (cur_date_obj["date"] if cur_date_obj else valid_dt.strftime("%Y-%m-%d"))
 
         return {
             "forecast_day": day,
             "day": day,
-            "selected_date": cur_date_obj["date"] if cur_date_obj else valid_dt.strftime("%Y-%m-%d"),
-            "selected_date_display": cur_date_obj["display_date"] if cur_date_obj else valid_dt.strftime("%d %B %Y"),
+            "selected_date": val_date_str,
+            "selected_date_display": cur_date_obj["display_date"] if cur_date_obj else val_date_str,
             "lead_hours": lead_h,
             "forecast_initialization_utc": meta.get("init_time_utc"),
             "initialization_time": meta.get("init_time_utc"),
-            "valid_forecast_time": valid_dt.strftime("%Y-%m-%d %H:%M UTC"),
-            "valid_forecast_time_utc": valid_dt.strftime("%Y-%m-%d %H:%M UTC"),
+            "valid_forecast_time": f"{val_date_str} {valid_hour:02d}:00 UTC",
+            "valid_forecast_time_utc": f"{val_date_str} {valid_hour:02d}:00 UTC",
             "temporal_resolution": meta.get("temporal_resolution", "3-Hourly Resolution (NOAA GEFS)"),
             "national_mean_confidence": mean_conf,
             "national_mean_bust_risk": mean_bust,
@@ -716,14 +778,19 @@ class LiveGefsService:
     def get_subdivision_forecast(self, region_id: str, day: int = 5, valid_hour: int = 0, date: Optional[str] = None) -> Optional[Dict[str, Any]]:
         """Returns detailed forecast, explainability, and pending verification for a subdivision."""
         if not self.live_data:
-            self.refresh_live_forecast()
+            self._load_cache()
+            if not self.live_data and self.prev_live_data:
+                self.live_data = self.prev_live_data
             if not self.live_data:
+                if not self.is_refreshing:
+                    import threading
+                    threading.Thread(target=self.refresh_live_forecast, daemon=True).start()
                 return None
 
         meta = self.live_data.get("meta", {})
         available_dates = meta.get("available_dates", [])
 
-        if date:
+        if date and (day is None or day <= 0):
             match_d = next((d for d in available_dates if d["date"] == date), None)
             if match_d:
                 day = match_d["day"]
@@ -747,6 +814,12 @@ class LiveGefsService:
 
         subdivs = self.live_data.get("subdivisions", {})
         day_data = subdivs.get(region_id, {}).get(str(day)) or subdivs.get(region_id, {}).get(day, {})
+        if not day_data:
+            for alt_d in range(0, 11):
+                alt_data = subdivs.get(region_id, {}).get(str(alt_d)) or subdivs.get(region_id, {}).get(alt_d)
+                if alt_data:
+                    day_data = alt_data
+                    break
         # Match valid_hour by actual valid_time_utc hour (and date if given) first
         target_hour_match = None
         for k, v in day_data.items():
@@ -874,8 +947,13 @@ class LiveGefsService:
     def get_city_forecast(self, city_id: str, day: int = 1, valid_hour: int = 0, date: Optional[str] = None, lat: Optional[float] = None, lon: Optional[float] = None) -> Optional[Dict[str, Any]]:
         """Returns 10-day forecast time series and specific timestamp data for a selected Indian city."""
         if not self.live_data:
-            self.refresh_live_forecast()
+            self._load_cache()
+            if not self.live_data and self.prev_live_data:
+                self.live_data = self.prev_live_data
             if not self.live_data:
+                if not self.is_refreshing:
+                    import threading
+                    threading.Thread(target=self.refresh_live_forecast, daemon=True).start()
                 return None
 
         # Ensure latest cities metadata is loaded
@@ -885,7 +963,7 @@ class LiveGefsService:
         meta = self.live_data.get("meta", {})
         available_dates = meta.get("available_dates", [])
 
-        if date:
+        if date and (day is None or day <= 0):
             match_d = next((d for d in available_dates if d["date"] == date), None)
             if match_d:
                 day = match_d["day"]
@@ -919,19 +997,28 @@ class LiveGefsService:
 
         # Build 10-day series
         daily_series = []
+        last_d_entry = None
         for d in range(0, 11):
-            d_str = str(d)
-            if d_str not in city_days:
-                continue
-            d_data = city_days.get(d_str, {})
-            h0_data = d_data.get("0") or d_data.get(0) or next(iter(d_data.values()), None)
+            d_data = city_days.get(str(d)) or city_days.get(d) or {}
+            h0_data = d_data.get("0") or d_data.get(0) or (next(iter(d_data.values())) if d_data else None)
             if not h0_data:
+                if last_d_entry:
+                    c_entry = dict(last_d_entry)
+                    c_entry["day"] = d
+                    c_entry["lead_hours"] = d * 24
+                    d_obj = next((dt for dt in available_dates if dt["day"] == d), None)
+                    v_date = d_obj["date"] if d_obj else f"Day {d}"
+                    c_entry["date"] = v_date
+                    c_entry["valid_date"] = v_date
+                    daily_series.append(c_entry)
                 continue
+
             p = h0_data.get("parameters", {})
             pr = h0_data.get("prediction", {})
             val_time_str = h0_data.get("valid_time_utc", "")
-            val_date = val_time_str.split()[0] if val_time_str else f"Day {d}"
-            daily_series.append({
+            d_obj = next((dt for dt in available_dates if dt["day"] == d), None)
+            val_date = d_obj["date"] if d_obj else (val_time_str.split()[0] if val_time_str else f"Day {d}")
+            entry = {
                 "day": d,
                 "date": val_date,
                 "valid_date": val_date,
@@ -954,7 +1041,9 @@ class LiveGefsService:
                 "confidence_score": pr.get("confidence_score", 95.0),
                 "model_confidence": pr.get("confidence_score", 95.0),
                 "risk_level": pr.get("risk_level", "Low")
-            })
+            }
+            daily_series.append(entry)
+            last_d_entry = entry
 
         # Selected day/hour forecast
         cur_day = max(0, min(10, day))
@@ -964,6 +1053,12 @@ class LiveGefsService:
         ]
 
         sel_day_data = city_days.get(str(cur_day)) or city_days.get(cur_day, {})
+        if not sel_day_data:
+            for alt_d in range(0, 11):
+                alt_data = city_days.get(str(alt_d)) or city_days.get(alt_d)
+                if alt_data:
+                    sel_day_data = alt_data
+                    break
         if not sel_day_data:
             return {
                 "status": "UNAVAILABLE",

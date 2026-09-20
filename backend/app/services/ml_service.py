@@ -109,6 +109,66 @@ class BustDetectionMLService:
             "summary": summary
         }
 
+    def predict_batch(self, raw_inputs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Vectorized batch inference across multiple locations/lead times for operational performance."""
+        if not raw_inputs:
+            return []
+        import pandas as pd
+        all_features = [compute_derived_features(inp) for inp in raw_inputs]
+        X = pd.DataFrame(all_features, columns=FEATURE_NAMES)
+
+        if self.model is not None:
+            try:
+                probs = self.model.predict_proba(X)[:, 1]
+            except Exception:
+                probs = [self._heuristic_prob(inp) for inp in raw_inputs]
+        else:
+            probs = [self._heuristic_prob(inp) for inp in raw_inputs]
+
+        results = []
+        for i, raw_input in enumerate(raw_inputs):
+            prob = float(probs[i])
+            bust_pct = round(prob * 100.0, 1)
+            confidence_pct = round(max(0.0, 100.0 - bust_pct), 1)
+
+            if prob < 0.25:
+                risk_level = "Low"
+                confidence_level = "High Confidence"
+            elif prob < 0.50:
+                risk_level = "Moderate"
+                confidence_level = "Medium Confidence"
+            elif prob < 0.75:
+                risk_level = "High"
+                confidence_level = "Low Confidence"
+            else:
+                risk_level = "Severe"
+                confidence_level = "Bust Imminent (Critical)"
+
+            features = all_features[i]
+            factors = calculate_contributing_factors(
+                features, self.feature_importances, prob, top_k=4
+            )
+            top_trigger = factors[0]["feature_name"] if factors else "Numerical Dispersion"
+            summary = (
+                f"Forecast bust risk is {risk_level} ({bust_pct}% probability). "
+                f"Lead-time confidence is {confidence_level} ({confidence_pct}%). "
+                f"Primary sensitivity trigger: {top_trigger}."
+            )
+
+            results.append({
+                "region_id": raw_input.get("region_id") or raw_input.get("city_id"),
+                "forecast_day": int(raw_input.get("lead_time_days", 3)),
+                "bust_probability": bust_pct,
+                "confidence_score": confidence_pct,
+                "risk_level": risk_level,
+                "confidence_level": confidence_level,
+                "dominant_factor": top_trigger,
+                "contributing_factors": factors,
+                "summary": summary
+            })
+
+        return results
+
     def _heuristic_prob(self, raw_input: Dict[str, Any]) -> float:
         day = float(raw_input.get("lead_time_days", 3))
         ens = float(raw_input.get("ensemble_spread", 1.2))
