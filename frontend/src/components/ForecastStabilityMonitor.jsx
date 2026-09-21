@@ -69,8 +69,13 @@ export default function ForecastStabilityMonitor({
       <div className="card-header-row">
         <div className="card-title-group">
           <div className="title-tag-row">
-            <span className="card-badge blue-badge">SIH 26079 Intelligence</span>
-            <span className={`card-badge ${statusBadge.class}`}>{statusBadge.label}</span>
+            <span className="card-badge blue-badge">Run-to-Run NWP Drift Tracking</span>
+            {hasPrev && (
+              <span className={`card-badge ${statusBadge.class}`}>{statusBadge.label}</span>
+            )}
+            {!hasPrev && (
+              <span className="card-badge badge-status-insufficient">Single Operational Cycle Active</span>
+            )}
           </div>
           <h3 className="card-title">Forecast Stability Monitor</h3>
           <p className="card-subtext">

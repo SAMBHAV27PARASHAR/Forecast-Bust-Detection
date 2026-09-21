@@ -1,148 +1,12 @@
 {
   "cities": [
     {
-      "id": "bareilly",
-      "name": "Bareilly",
-      "state": "Uttar Pradesh",
-      "lat": 28.367,
-      "lon": 79.4304,
-      "subdivision_id": "IND-UP-BIH"
-    },
-    {
-      "id": "delhi",
-      "name": "New Delhi",
-      "state": "Delhi",
-      "lat": 28.6139,
-      "lon": 77.209,
-      "subdivision_id": "IND-NW-PLN"
-    },
-    {
-      "id": "mumbai",
-      "name": "Mumbai",
-      "state": "Maharashtra",
-      "lat": 19.076,
-      "lon": 72.8777,
-      "subdivision_id": "IND-KON-GOA"
-    },
-    {
-      "id": "bengaluru",
-      "name": "Bengaluru",
-      "state": "Karnataka",
-      "lat": 12.9716,
-      "lon": 77.5946,
-      "subdivision_id": "IND-KAR"
-    },
-    {
-      "id": "kolkata",
-      "name": "Kolkata",
-      "state": "West Bengal",
-      "lat": 22.5726,
-      "lon": 88.3639,
-      "subdivision_id": "IND-WB-ODI"
-    },
-    {
-      "id": "chennai",
-      "name": "Chennai",
-      "state": "Tamil Nadu",
-      "lat": 13.0827,
-      "lon": 80.2707,
-      "subdivision_id": "IND-TN"
-    },
-    {
-      "id": "hyderabad",
-      "name": "Hyderabad",
-      "state": "Telangana",
-      "lat": 17.385,
-      "lon": 78.4867,
-      "subdivision_id": "IND-TEL-AP"
-    },
-    {
-      "id": "ahmedabad",
-      "name": "Ahmedabad",
-      "state": "Gujarat",
-      "lat": 23.0225,
-      "lon": 72.5714,
-      "subdivision_id": "IND-GUJ"
-    },
-    {
-      "id": "pune",
-      "name": "Pune",
-      "state": "Maharashtra",
-      "lat": 18.5204,
-      "lon": 73.8567,
-      "subdivision_id": "IND-MAH-DESH"
-    },
-    {
-      "id": "jaipur",
-      "name": "Jaipur",
-      "state": "Rajasthan",
-      "lat": 26.9124,
-      "lon": 75.7873,
-      "subdivision_id": "IND-RAJ"
-    },
-    {
-      "id": "lucknow",
-      "name": "Lucknow",
-      "state": "Uttar Pradesh",
-      "lat": 26.8467,
-      "lon": 80.9462,
-      "subdivision_id": "IND-UP-BIH"
-    },
-    {
-      "id": "kanpur",
-      "name": "Kanpur",
-      "state": "Uttar Pradesh",
-      "lat": 26.4499,
-      "lon": 80.3319,
-      "subdivision_id": "IND-UP-BIH"
-    },
-    {
-      "id": "nagpur",
-      "name": "Nagpur",
-      "state": "Maharashtra",
-      "lat": 21.1458,
-      "lon": 79.0882,
-      "subdivision_id": "IND-MAH-DESH"
-    },
-    {
-      "id": "indore",
-      "name": "Indore",
-      "state": "Madhya Pradesh",
-      "lat": 22.7196,
-      "lon": 75.8577,
-      "subdivision_id": "IND-CEN-MP"
-    },
-    {
-      "id": "bhopal",
-      "name": "Bhopal",
-      "state": "Madhya Pradesh",
-      "lat": 23.2599,
-      "lon": 77.4126,
-      "subdivision_id": "IND-CEN-MP"
-    },
-    {
-      "id": "patna",
-      "name": "Patna",
-      "state": "Bihar",
-      "lat": 25.5941,
-      "lon": 85.1376,
-      "subdivision_id": "IND-UP-BIH"
-    },
-    {
-      "id": "vadodara",
-      "name": "Vadodara",
-      "state": "Gujarat",
-      "lat": 22.3072,
-      "lon": 73.1812,
-      "subdivision_id": "IND-GUJ"
-    },
-    {
-      "id": "ludhiana",
-      "name": "Ludhiana",
-      "state": "Punjab",
-      "lat": 30.901,
-      "lon": 75.8573,
-      "subdivision_id": "IND-NW-PLN"
+      "id": "agartala",
+      "name": "Agartala",
+      "state": "Tripura",
+      "lat": 23.8315,
+      "lon": 91.2868,
+      "subdivision_id": "IND-NE"
     },
     {
       "id": "agra",
@@ -153,284 +17,20 @@
       "subdivision_id": "IND-UP-BIH"
     },
     {
-      "id": "varanasi",
-      "name": "Varanasi",
-      "state": "Uttar Pradesh",
-      "lat": 25.3176,
-      "lon": 82.9739,
-      "subdivision_id": "IND-UP-BIH"
-    },
-    {
-      "id": "srinagar",
-      "name": "Srinagar",
-      "state": "Jammu & Kashmir",
-      "lat": 34.0837,
-      "lon": 74.7973,
-      "subdivision_id": "IND-NW-HIM"
-    },
-    {
-      "id": "dehradun",
-      "name": "Dehradun",
-      "state": "Uttarakhand",
-      "lat": 30.3165,
-      "lon": 78.0322,
-      "subdivision_id": "IND-NW-HIM"
-    },
-    {
-      "id": "shimla",
-      "name": "Shimla",
-      "state": "Himachal Pradesh",
-      "lat": 31.1048,
-      "lon": 77.1734,
-      "subdivision_id": "IND-NW-HIM"
-    },
-    {
-      "id": "chandigarh",
-      "name": "Chandigarh",
-      "state": "Punjab / Haryana",
-      "lat": 30.7333,
-      "lon": 76.7794,
-      "subdivision_id": "IND-NW-PLN"
-    },
-    {
-      "id": "amritsar",
-      "name": "Amritsar",
-      "state": "Punjab",
-      "lat": 31.634,
-      "lon": 74.8723,
-      "subdivision_id": "IND-NW-PLN"
-    },
-    {
-      "id": "jodhpur",
-      "name": "Jodhpur",
-      "state": "Rajasthan",
-      "lat": 26.2389,
-      "lon": 73.0243,
-      "subdivision_id": "IND-RAJ"
-    },
-    {
-      "id": "surat",
-      "name": "Surat",
+      "id": "ahmedabad",
+      "name": "Ahmedabad",
       "state": "Gujarat",
-      "lat": 21.1702,
-      "lon": 72.8311,
+      "lat": 23.0225,
+      "lon": 72.5714,
       "subdivision_id": "IND-GUJ"
     },
     {
-      "id": "rajkot",
-      "name": "Rajkot",
-      "state": "Gujarat",
-      "lat": 22.3039,
-      "lon": 70.8022,
-      "subdivision_id": "IND-GUJ"
-    },
-    {
-      "id": "guwahati",
-      "name": "Guwahati",
-      "state": "Assam",
-      "lat": 26.1445,
-      "lon": 91.7362,
-      "subdivision_id": "IND-NE"
-    },
-    {
-      "id": "shillong",
-      "name": "Shillong",
-      "state": "Meghalaya",
-      "lat": 25.5788,
-      "lon": 91.8933,
-      "subdivision_id": "IND-NE"
-    },
-    {
-      "id": "bhubaneswar",
-      "name": "Bhubaneswar",
-      "state": "Odisha",
-      "lat": 20.2961,
-      "lon": 85.8245,
-      "subdivision_id": "IND-WB-ODI"
-    },
-    {
-      "id": "ranchi",
-      "name": "Ranchi",
-      "state": "Jharkhand",
-      "lat": 23.3441,
-      "lon": 85.3096,
-      "subdivision_id": "IND-WB-ODI"
-    },
-    {
-      "id": "raipur",
-      "name": "Raipur",
-      "state": "Chhattisgarh",
-      "lat": 21.2514,
-      "lon": 81.6296,
-      "subdivision_id": "IND-CEN-MP"
-    },
-    {
-      "id": "gwalior",
-      "name": "Gwalior",
-      "state": "Madhya Pradesh",
-      "lat": 26.2183,
-      "lon": 78.1828,
-      "subdivision_id": "IND-CEN-MP"
-    },
-    {
-      "id": "jabalpur",
-      "name": "Jabalpur",
-      "state": "Madhya Pradesh",
-      "lat": 23.1815,
-      "lon": 79.9864,
-      "subdivision_id": "IND-CEN-MP"
-    },
-    {
-      "id": "panaji",
-      "name": "Panaji (Goa)",
-      "state": "Goa",
-      "lat": 15.4909,
-      "lon": 73.8278,
-      "subdivision_id": "IND-KON-GOA"
-    },
-    {
-      "id": "visakhapatnam",
-      "name": "Visakhapatnam",
-      "state": "Andhra Pradesh",
-      "lat": 17.6868,
-      "lon": 83.2185,
-      "subdivision_id": "IND-TEL-AP"
-    },
-    {
-      "id": "vijayawada",
-      "name": "Vijayawada",
-      "state": "Andhra Pradesh",
-      "lat": 16.5062,
-      "lon": 80.648,
-      "subdivision_id": "IND-TEL-AP"
-    },
-    {
-      "id": "kochi",
-      "name": "Kochi",
-      "state": "Kerala",
-      "lat": 9.9312,
-      "lon": 76.2673,
-      "subdivision_id": "IND-KER"
-    },
-    {
-      "id": "thiruvananthapuram",
-      "name": "Thiruvananthapuram",
-      "state": "Kerala",
-      "lat": 8.5241,
-      "lon": 76.9366,
-      "subdivision_id": "IND-KER"
-    },
-    {
-      "id": "madurai",
-      "name": "Madurai",
-      "state": "Tamil Nadu",
-      "lat": 9.9252,
-      "lon": 78.1198,
-      "subdivision_id": "IND-TN"
-    },
-    {
-      "id": "coimbatore",
-      "name": "Coimbatore",
-      "state": "Tamil Nadu",
-      "lat": 11.0168,
-      "lon": 76.9558,
-      "subdivision_id": "IND-TN"
-    },
-    {
-      "id": "mangalore",
-      "name": "Mangalore",
-      "state": "Karnataka",
-      "lat": 12.9141,
-      "lon": 74.856,
-      "subdivision_id": "IND-KAR"
-    },
-    {
-      "id": "mysore",
-      "name": "Mysore",
-      "state": "Karnataka",
-      "lat": 12.2958,
-      "lon": 76.6394,
-      "subdivision_id": "IND-KAR"
-    },
-    {
-      "id": "aurangabad",
-      "name": "Chhatrapati Sambhajinagar",
+      "id": "ahmednagar",
+      "name": "Ahmednagar",
       "state": "Maharashtra",
-      "lat": 19.8762,
-      "lon": 75.3433,
+      "lat": 19.0948,
+      "lon": 74.748,
       "subdivision_id": "IND-MAH-DESH"
-    },
-    {
-      "id": "nashik",
-      "name": "Nashik",
-      "state": "Maharashtra",
-      "lat": 19.9975,
-      "lon": 73.7898,
-      "subdivision_id": "IND-MAH-DESH"
-    },
-    {
-      "id": "solapur",
-      "name": "Solapur",
-      "state": "Maharashtra",
-      "lat": 17.6599,
-      "lon": 75.9064,
-      "subdivision_id": "IND-MAH-DESH"
-    },
-    {
-      "id": "meerut",
-      "name": "Meerut",
-      "state": "Uttar Pradesh",
-      "lat": 28.9845,
-      "lon": 77.7064,
-      "subdivision_id": "IND-NW-PLN"
-    },
-    {
-      "id": "aligarh",
-      "name": "Aligarh",
-      "state": "Uttar Pradesh",
-      "lat": 27.8974,
-      "lon": 78.088,
-      "subdivision_id": "IND-UP-BIH"
-    },
-    {
-      "id": "moradabad",
-      "name": "Moradabad",
-      "state": "Uttar Pradesh",
-      "lat": 28.8386,
-      "lon": 78.7733,
-      "subdivision_id": "IND-UP-BIH"
-    },
-    {
-      "id": "itanagar",
-      "name": "Itanagar",
-      "state": "Arunachal Pradesh",
-      "lat": 27.0844,
-      "lon": 93.6053,
-      "subdivision_id": "IND-NE"
-    },
-    {
-      "id": "gurugram",
-      "name": "Gurugram",
-      "state": "Haryana",
-      "lat": 28.4595,
-      "lon": 77.0266,
-      "subdivision_id": "IND-NW-PLN"
-    },
-    {
-      "id": "leh",
-      "name": "Leh",
-      "state": "Ladakh",
-      "lat": 34.1526,
-      "lon": 77.5771,
-      "subdivision_id": "IND-NW-HIM"
-    },
-    {
-      "id": "imphal",
-      "name": "Imphal",
-      "state": "Manipur",
-      "lat": 24.817,
-      "lon": 93.9368,
-      "subdivision_id": "IND-NE"
     },
     {
       "id": "aizawl",
@@ -441,36 +41,468 @@
       "subdivision_id": "IND-NE"
     },
     {
-      "id": "kohima",
-      "name": "Kohima",
-      "state": "Nagaland",
-      "lat": 25.6751,
-      "lon": 94.1086,
-      "subdivision_id": "IND-NE"
+      "id": "ajmer",
+      "name": "Ajmer",
+      "state": "Rajasthan",
+      "lat": 26.4499,
+      "lon": 74.6399,
+      "subdivision_id": "IND-RAJ"
     },
     {
-      "id": "agartala",
-      "name": "Agartala",
-      "state": "Tripura",
-      "lat": 23.8315,
-      "lon": 91.2868,
-      "subdivision_id": "IND-NE"
+      "id": "akola",
+      "name": "Akola",
+      "state": "Maharashtra",
+      "lat": 20.7002,
+      "lon": 77.0082,
+      "subdivision_id": "IND-MAH-DESH"
     },
     {
-      "id": "gangtok",
-      "name": "Gangtok",
-      "state": "Sikkim",
-      "lat": 27.3389,
-      "lon": 88.6065,
-      "subdivision_id": "IND-NE"
+      "id": "alappuzha",
+      "name": "Alappuzha",
+      "state": "Kerala",
+      "lat": 9.4981,
+      "lon": 76.3388,
+      "subdivision_id": "IND-KER"
     },
     {
-      "id": "port-blair",
-      "name": "Port Blair",
-      "state": "Andaman and Nicobar Islands",
-      "lat": 11.6234,
-      "lon": 92.7265,
+      "id": "aligarh",
+      "name": "Aligarh",
+      "state": "Uttar Pradesh",
+      "lat": 27.8974,
+      "lon": 78.088,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "almora",
+      "name": "Almora",
+      "state": "Uttarakhand",
+      "lat": 29.5971,
+      "lon": 79.6591,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "alwar",
+      "name": "Alwar",
+      "state": "Rajasthan",
+      "lat": 27.553,
+      "lon": 76.6346,
+      "subdivision_id": "IND-RAJ"
+    },
+    {
+      "id": "amaravati",
+      "name": "Amaravati",
+      "state": "Andhra Pradesh",
+      "lat": 16.5417,
+      "lon": 80.5158,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "ambala",
+      "name": "Ambala",
+      "state": "Haryana",
+      "lat": 30.3782,
+      "lon": 76.7767,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "amethi",
+      "name": "Amethi",
+      "state": "Uttar Pradesh",
+      "lat": 26.1542,
+      "lon": 81.8153,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "amravati",
+      "name": "Amravati",
+      "state": "Maharashtra",
+      "lat": 20.932,
+      "lon": 77.7523,
+      "subdivision_id": "IND-MAH-DESH"
+    },
+    {
+      "id": "amritsar",
+      "name": "Amritsar",
+      "state": "Punjab",
+      "lat": 31.634,
+      "lon": 74.8723,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "anand",
+      "name": "Anand",
+      "state": "Gujarat",
+      "lat": 22.5645,
+      "lon": 72.9289,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "anantapur",
+      "name": "Anantapur",
+      "state": "Andhra Pradesh",
+      "lat": 14.6819,
+      "lon": 77.6006,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "anantnag",
+      "name": "Anantnag",
+      "state": "Jammu & Kashmir",
+      "lat": 33.7311,
+      "lon": 75.1522,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "arrah",
+      "name": "Arrah",
+      "state": "Bihar",
+      "lat": 25.556,
+      "lon": 84.6603,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "asansol",
+      "name": "Asansol",
+      "state": "West Bengal",
+      "lat": 23.6739,
+      "lon": 86.9524,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "ayodhya",
+      "name": "Ayodhya",
+      "state": "Uttar Pradesh",
+      "lat": 26.7922,
+      "lon": 82.1998,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "azamgarh",
+      "name": "Azamgarh",
+      "state": "Uttar Pradesh",
+      "lat": 26.0738,
+      "lon": 83.1859,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "balasore",
+      "name": "Balasore",
+      "state": "Odisha",
+      "lat": 21.4934,
+      "lon": 86.9135,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "ballari",
+      "name": "Ballari",
+      "state": "Karnataka",
+      "lat": 15.1394,
+      "lon": 76.9214,
+      "subdivision_id": "IND-KAR"
+    },
+    {
+      "id": "ballia",
+      "name": "Ballia",
+      "state": "Uttar Pradesh",
+      "lat": 25.7584,
+      "lon": 84.1497,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "bangalore",
+      "name": "Bangalore",
+      "state": "Karnataka",
+      "lat": 12.9716,
+      "lon": 77.5946,
+      "subdivision_id": "IND-KAR"
+    },
+    {
+      "id": "baramulla",
+      "name": "Baramulla",
+      "state": "Jammu & Kashmir",
+      "lat": 34.198,
+      "lon": 74.3636,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "bardhaman",
+      "name": "Bardhaman",
+      "state": "West Bengal",
+      "lat": 23.2324,
+      "lon": 87.8615,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "bareilly",
+      "name": "Bareilly",
+      "state": "Uttar Pradesh",
+      "lat": 28.367,
+      "lon": 79.4304,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "barmer",
+      "name": "Barmer",
+      "state": "Rajasthan",
+      "lat": 25.7532,
+      "lon": 71.4181,
+      "subdivision_id": "IND-RAJ"
+    },
+    {
+      "id": "basti",
+      "name": "Basti",
+      "state": "Uttar Pradesh",
+      "lat": 26.8,
+      "lon": 82.7667,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "bhatinda",
+      "name": "Bathinda",
+      "state": "Punjab",
+      "lat": 30.211,
+      "lon": 74.9455,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "bathinda",
+      "name": "Bathinda",
+      "state": "Punjab",
+      "lat": 30.211,
+      "lon": 74.9455,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "begusarai",
+      "name": "Begusarai",
+      "state": "Bihar",
+      "lat": 25.4182,
+      "lon": 86.1272,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "belgaum",
+      "name": "Belagavi",
+      "state": "Karnataka",
+      "lat": 15.8497,
+      "lon": 74.4977,
+      "subdivision_id": "IND-KAR"
+    },
+    {
+      "id": "belagavi",
+      "name": "Belagavi",
+      "state": "Karnataka",
+      "lat": 15.8497,
+      "lon": 74.4977,
+      "subdivision_id": "IND-KAR"
+    },
+    {
+      "id": "bengaluru",
+      "name": "Bengaluru",
+      "state": "Karnataka",
+      "lat": 12.9716,
+      "lon": 77.5946,
+      "subdivision_id": "IND-KAR"
+    },
+    {
+      "id": "berhampur",
+      "name": "Berhampur",
+      "state": "Odisha",
+      "lat": 19.315,
+      "lon": 84.7941,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "bhagalpur",
+      "name": "Bhagalpur",
+      "state": "Bihar",
+      "lat": 25.2425,
+      "lon": 86.9842,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "bharatpur",
+      "name": "Bharatpur",
+      "state": "Rajasthan",
+      "lat": 27.2152,
+      "lon": 77.503,
+      "subdivision_id": "IND-RAJ"
+    },
+    {
+      "id": "bharuch",
+      "name": "Bharuch",
+      "state": "Gujarat",
+      "lat": 21.7051,
+      "lon": 72.9959,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "bhavnagar",
+      "name": "Bhavnagar",
+      "state": "Gujarat",
+      "lat": 21.7645,
+      "lon": 72.1519,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "bhilai",
+      "name": "Bhilai",
+      "state": "Chhattisgarh",
+      "lat": 21.2121,
+      "lon": 81.3733,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "bhilwara",
+      "name": "Bhilwara",
+      "state": "Rajasthan",
+      "lat": 25.3407,
+      "lon": 74.6313,
+      "subdivision_id": "IND-RAJ"
+    },
+    {
+      "id": "bhopal",
+      "name": "Bhopal",
+      "state": "Madhya Pradesh",
+      "lat": 23.2599,
+      "lon": 77.4126,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "bhubaneswar",
+      "name": "Bhubaneswar",
+      "state": "Odisha",
+      "lat": 20.2961,
+      "lon": 85.8245,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "bhuj",
+      "name": "Bhuj",
+      "state": "Gujarat",
+      "lat": 23.242,
+      "lon": 69.6669,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "bidar",
+      "name": "Bidar",
+      "state": "Karnataka",
+      "lat": 17.9104,
+      "lon": 77.5199,
+      "subdivision_id": "IND-KAR"
+    },
+    {
+      "id": "bikaner",
+      "name": "Bikaner",
+      "state": "Rajasthan",
+      "lat": 28.0229,
+      "lon": 73.3119,
+      "subdivision_id": "IND-RAJ"
+    },
+    {
+      "id": "bilaspur",
+      "name": "Bilaspur",
+      "state": "Chhattisgarh",
+      "lat": 22.0797,
+      "lon": 82.1409,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "bokaro",
+      "name": "Bokaro Steel City",
+      "state": "Jharkhand",
+      "lat": 23.6693,
+      "lon": 86.1511,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "budaun",
+      "name": "Budaun",
+      "state": "Uttar Pradesh",
+      "lat": 28.0327,
+      "lon": 79.1232,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "chandigarh",
+      "name": "Chandigarh",
+      "state": "Punjab / Haryana",
+      "lat": 30.7333,
+      "lon": 76.7794,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "chandrapur",
+      "name": "Chandrapur",
+      "state": "Maharashtra",
+      "lat": 19.9615,
+      "lon": 79.2961,
+      "subdivision_id": "IND-MAH-DESH"
+    },
+    {
+      "id": "chennai",
+      "name": "Chennai",
+      "state": "Tamil Nadu",
+      "lat": 13.0827,
+      "lon": 80.2707,
       "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "chhapra",
+      "name": "Chhapra",
+      "state": "Bihar",
+      "lat": 25.7848,
+      "lon": 84.7274,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "aurangabad",
+      "name": "Chhatrapati Sambhajinagar",
+      "state": "Maharashtra",
+      "lat": 19.8762,
+      "lon": 75.3433,
+      "subdivision_id": "IND-MAH-DESH"
+    },
+    {
+      "id": "chhindwara",
+      "name": "Chhindwara",
+      "state": "Madhya Pradesh",
+      "lat": 22.0574,
+      "lon": 78.9382,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "chittorgarh",
+      "name": "Chittorgarh",
+      "state": "Rajasthan",
+      "lat": 24.8887,
+      "lon": 74.6269,
+      "subdivision_id": "IND-RAJ"
+    },
+    {
+      "id": "coimbatore",
+      "name": "Coimbatore",
+      "state": "Tamil Nadu",
+      "lat": 11.0168,
+      "lon": 76.9558,
+      "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "cuddalore",
+      "name": "Cuddalore",
+      "state": "Tamil Nadu",
+      "lat": 11.748,
+      "lon": 79.7714,
+      "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "cuttack",
+      "name": "Cuttack",
+      "state": "Odisha",
+      "lat": 20.4625,
+      "lon": 85.8828,
+      "subdivision_id": "IND-WB-ODI"
     },
     {
       "id": "daman",
@@ -481,27 +513,275 @@
       "subdivision_id": "IND-GUJ"
     },
     {
-      "id": "kavaratti",
-      "name": "Kavaratti",
-      "state": "Lakshadweep",
-      "lat": 10.5669,
-      "lon": 72.642,
-      "subdivision_id": "IND-KER"
+      "id": "darbhanga",
+      "name": "Darbhanga",
+      "state": "Bihar",
+      "lat": 26.1542,
+      "lon": 85.8918,
+      "subdivision_id": "IND-UP-BIH"
     },
     {
-      "id": "puducherry",
-      "name": "Puducherry",
-      "state": "Puducherry",
-      "lat": 11.9416,
-      "lon": 79.8083,
+      "id": "darjeeling",
+      "name": "Darjeeling",
+      "state": "West Bengal",
+      "lat": 27.041,
+      "lon": 88.2663,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "davanagere",
+      "name": "Davanagere",
+      "state": "Karnataka",
+      "lat": 14.4644,
+      "lon": 75.9218,
+      "subdivision_id": "IND-KAR"
+    },
+    {
+      "id": "dehradun",
+      "name": "Dehradun",
+      "state": "Uttarakhand",
+      "lat": 30.3165,
+      "lon": 78.0322,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "deoghar",
+      "name": "Deoghar",
+      "state": "Jharkhand",
+      "lat": 24.4826,
+      "lon": 86.7,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "deoria",
+      "name": "Deoria",
+      "state": "Uttar Pradesh",
+      "lat": 26.5024,
+      "lon": 83.7791,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "dewas",
+      "name": "Dewas",
+      "state": "Madhya Pradesh",
+      "lat": 22.9676,
+      "lon": 76.0534,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "dhanbad",
+      "name": "Dhanbad",
+      "state": "Jharkhand",
+      "lat": 23.7957,
+      "lon": 86.4304,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "dharamshala",
+      "name": "Dharamshala",
+      "state": "Himachal Pradesh",
+      "lat": 32.219,
+      "lon": 76.3234,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "dhule",
+      "name": "Dhule",
+      "state": "Maharashtra",
+      "lat": 20.9042,
+      "lon": 74.7749,
+      "subdivision_id": "IND-MAH-DESH"
+    },
+    {
+      "id": "dibrugarh",
+      "name": "Dibrugarh",
+      "state": "Assam",
+      "lat": 27.4728,
+      "lon": 94.912,
+      "subdivision_id": "IND-NE"
+    },
+    {
+      "id": "dimapur",
+      "name": "Dimapur",
+      "state": "Nagaland",
+      "lat": 25.909,
+      "lon": 93.7266,
+      "subdivision_id": "IND-NE"
+    },
+    {
+      "id": "dindigul",
+      "name": "Dindigul",
+      "state": "Tamil Nadu",
+      "lat": 10.3673,
+      "lon": 77.9803,
       "subdivision_id": "IND-TN"
     },
     {
-      "id": "prayagraj",
-      "name": "Prayagraj",
+      "id": "diu",
+      "name": "Diu",
+      "state": "Dadra & Nagar Haveli and Daman & Diu",
+      "lat": 20.7144,
+      "lon": 70.9874,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "durg",
+      "name": "Durg",
+      "state": "Chhattisgarh",
+      "lat": 21.1904,
+      "lon": 81.2849,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "durg-bhilai",
+      "name": "Durg-Bhilai",
+      "state": "Chhattisgarh",
+      "lat": 21.1904,
+      "lon": 81.2849,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "durgapur",
+      "name": "Durgapur",
+      "state": "West Bengal",
+      "lat": 23.5204,
+      "lon": 87.3119,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "eluru",
+      "name": "Eluru",
+      "state": "Andhra Pradesh",
+      "lat": 16.7107,
+      "lon": 81.0952,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "erode",
+      "name": "Erode",
+      "state": "Tamil Nadu",
+      "lat": 11.341,
+      "lon": 77.7172,
+      "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "faridabad",
+      "name": "Faridabad",
+      "state": "Haryana",
+      "lat": 28.4089,
+      "lon": 77.3178,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "firozabad",
+      "name": "Firozabad",
       "state": "Uttar Pradesh",
-      "lat": 25.4358,
-      "lon": 81.8463,
+      "lat": 27.1593,
+      "lon": 78.3957,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "gandhinagar",
+      "name": "Gandhinagar",
+      "state": "Gujarat",
+      "lat": 23.2156,
+      "lon": 72.6369,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "gangtok",
+      "name": "Gangtok",
+      "state": "Sikkim",
+      "lat": 27.3389,
+      "lon": 88.6065,
+      "subdivision_id": "IND-NE"
+    },
+    {
+      "id": "gaya",
+      "name": "Gaya",
+      "state": "Bihar",
+      "lat": 24.7914,
+      "lon": 85.0002,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "ghaziabad",
+      "name": "Ghaziabad",
+      "state": "Uttar Pradesh",
+      "lat": 28.6692,
+      "lon": 77.4538,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "gorakhpur",
+      "name": "Gorakhpur",
+      "state": "Uttar Pradesh",
+      "lat": 26.7606,
+      "lon": 83.3732,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "greater-noida",
+      "name": "Greater Noida",
+      "state": "Uttar Pradesh",
+      "lat": 28.4744,
+      "lon": 77.504,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "guntur",
+      "name": "Guntur",
+      "state": "Andhra Pradesh",
+      "lat": 16.3067,
+      "lon": 80.4365,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "gurugram",
+      "name": "Gurugram",
+      "state": "Haryana",
+      "lat": 28.4595,
+      "lon": 77.0266,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "guwahati",
+      "name": "Guwahati",
+      "state": "Assam",
+      "lat": 26.1445,
+      "lon": 91.7362,
+      "subdivision_id": "IND-NE"
+    },
+    {
+      "id": "gwalior",
+      "name": "Gwalior",
+      "state": "Madhya Pradesh",
+      "lat": 26.2183,
+      "lon": 78.1828,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "haldia",
+      "name": "Haldia",
+      "state": "West Bengal",
+      "lat": 22.0667,
+      "lon": 88.0698,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "haldwani",
+      "name": "Haldwani",
+      "state": "Uttarakhand",
+      "lat": 29.2183,
+      "lon": 79.513,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "hardoi",
+      "name": "Hardoi",
+      "state": "Uttar Pradesh",
+      "lat": 27.3989,
+      "lon": 80.1311,
       "subdivision_id": "IND-UP-BIH"
     },
     {
@@ -513,60 +793,60 @@
       "subdivision_id": "IND-NW-HIM"
     },
     {
-      "id": "mathura",
-      "name": "Mathura",
-      "state": "Uttar Pradesh",
-      "lat": 27.4924,
-      "lon": 77.6737,
-      "subdivision_id": "IND-UP-BIH"
+      "id": "hassan",
+      "name": "Hassan",
+      "state": "Karnataka",
+      "lat": 13.0033,
+      "lon": 76.1004,
+      "subdivision_id": "IND-KAR"
     },
     {
-      "id": "gorakhpur",
-      "name": "Gorakhpur",
-      "state": "Uttar Pradesh",
-      "lat": 26.7606,
-      "lon": 83.3732,
-      "subdivision_id": "IND-UP-BIH"
+      "id": "hazaribagh",
+      "name": "Hazaribagh",
+      "state": "Jharkhand",
+      "lat": 23.9966,
+      "lon": 85.3685,
+      "subdivision_id": "IND-WB-ODI"
     },
     {
-      "id": "faridabad",
-      "name": "Faridabad",
+      "id": "hisar",
+      "name": "Hisar",
       "state": "Haryana",
-      "lat": 28.4089,
-      "lon": 77.3178,
+      "lat": 29.1492,
+      "lon": 75.7217,
       "subdivision_id": "IND-NW-PLN"
     },
     {
-      "id": "noida",
-      "name": "Noida",
-      "state": "Uttar Pradesh",
-      "lat": 28.5355,
-      "lon": 77.391,
+      "id": "hoshiarpur",
+      "name": "Hoshiarpur",
+      "state": "Punjab",
+      "lat": 31.5273,
+      "lon": 75.9149,
       "subdivision_id": "IND-NW-PLN"
     },
     {
-      "id": "ghaziabad",
-      "name": "Ghaziabad",
-      "state": "Uttar Pradesh",
-      "lat": 28.6692,
-      "lon": 77.4538,
-      "subdivision_id": "IND-NW-PLN"
+      "id": "hosur",
+      "name": "Hosur",
+      "state": "Tamil Nadu",
+      "lat": 12.7409,
+      "lon": 77.8253,
+      "subdivision_id": "IND-TN"
     },
     {
-      "id": "jammu",
-      "name": "Jammu",
-      "state": "Jammu & Kashmir",
-      "lat": 32.7266,
-      "lon": 74.857,
-      "subdivision_id": "IND-NW-HIM"
+      "id": "howrah",
+      "name": "Howrah",
+      "state": "West Bengal",
+      "lat": 22.5958,
+      "lon": 88.2636,
+      "subdivision_id": "IND-WB-ODI"
     },
     {
-      "id": "tirupati",
-      "name": "Tirupati",
-      "state": "Andhra Pradesh",
-      "lat": 13.6288,
-      "lon": 79.4192,
-      "subdivision_id": "IND-TEL-AP"
+      "id": "hubballi",
+      "name": "Hubballi-Dharwad",
+      "state": "Karnataka",
+      "lat": 15.3647,
+      "lon": 75.124,
+      "subdivision_id": "IND-KAR"
     },
     {
       "id": "hubli",
@@ -577,12 +857,1340 @@
       "subdivision_id": "IND-KAR"
     },
     {
-      "id": "belgaum",
-      "name": "Belagavi",
+      "id": "hyderabad",
+      "name": "Hyderabad",
+      "state": "Telangana",
+      "lat": 17.385,
+      "lon": 78.4867,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "imphal",
+      "name": "Imphal",
+      "state": "Manipur",
+      "lat": 24.817,
+      "lon": 93.9368,
+      "subdivision_id": "IND-NE"
+    },
+    {
+      "id": "indore",
+      "name": "Indore",
+      "state": "Madhya Pradesh",
+      "lat": 22.7196,
+      "lon": 75.8577,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "itanagar",
+      "name": "Itanagar",
+      "state": "Arunachal Pradesh",
+      "lat": 27.0844,
+      "lon": 93.6053,
+      "subdivision_id": "IND-NE"
+    },
+    {
+      "id": "jabalpur",
+      "name": "Jabalpur",
+      "state": "Madhya Pradesh",
+      "lat": 23.1815,
+      "lon": 79.9864,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "jagdalpur",
+      "name": "Jagdalpur",
+      "state": "Chhattisgarh",
+      "lat": 19.0736,
+      "lon": 82.0308,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "jaipur",
+      "name": "Jaipur",
+      "state": "Rajasthan",
+      "lat": 26.9124,
+      "lon": 75.7873,
+      "subdivision_id": "IND-RAJ"
+    },
+    {
+      "id": "jaisalmer",
+      "name": "Jaisalmer",
+      "state": "Rajasthan",
+      "lat": 26.9157,
+      "lon": 70.9083,
+      "subdivision_id": "IND-RAJ"
+    },
+    {
+      "id": "jalandhar",
+      "name": "Jalandhar",
+      "state": "Punjab",
+      "lat": 31.326,
+      "lon": 75.5762,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "jalna",
+      "name": "Jalna",
+      "state": "Maharashtra",
+      "lat": 19.841,
+      "lon": 75.8864,
+      "subdivision_id": "IND-MAH-DESH"
+    },
+    {
+      "id": "jammu",
+      "name": "Jammu",
+      "state": "Jammu & Kashmir",
+      "lat": 32.7266,
+      "lon": 74.857,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "jamnagar",
+      "name": "Jamnagar",
+      "state": "Gujarat",
+      "lat": 22.4707,
+      "lon": 70.0577,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "jamshedpur",
+      "name": "Jamshedpur",
+      "state": "Jharkhand",
+      "lat": 22.8046,
+      "lon": 86.2029,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "jaunpur",
+      "name": "Jaunpur",
+      "state": "Uttar Pradesh",
+      "lat": 25.7464,
+      "lon": 82.6837,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "jhansi",
+      "name": "Jhansi",
+      "state": "Uttar Pradesh",
+      "lat": 25.4484,
+      "lon": 78.5685,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "jodhpur",
+      "name": "Jodhpur",
+      "state": "Rajasthan",
+      "lat": 26.2389,
+      "lon": 73.0243,
+      "subdivision_id": "IND-RAJ"
+    },
+    {
+      "id": "jorhat",
+      "name": "Jorhat",
+      "state": "Assam",
+      "lat": 26.7509,
+      "lon": 94.2037,
+      "subdivision_id": "IND-NE"
+    },
+    {
+      "id": "junagadh",
+      "name": "Junagadh",
+      "state": "Gujarat",
+      "lat": 21.5222,
+      "lon": 70.4579,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "kadapa",
+      "name": "Kadapa",
+      "state": "Andhra Pradesh",
+      "lat": 14.4673,
+      "lon": 78.8242,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "kakinada",
+      "name": "Kakinada",
+      "state": "Andhra Pradesh",
+      "lat": 16.9891,
+      "lon": 82.2475,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "kalaburagi",
+      "name": "Kalaburagi",
       "state": "Karnataka",
-      "lat": 15.8497,
-      "lon": 74.4977,
+      "lat": 17.3297,
+      "lon": 76.8343,
       "subdivision_id": "IND-KAR"
+    },
+    {
+      "id": "kalyan-dombivli",
+      "name": "Kalyan-Dombivli",
+      "state": "Maharashtra",
+      "lat": 19.2403,
+      "lon": 73.1305,
+      "subdivision_id": "IND-KON-GOA"
+    },
+    {
+      "id": "kanchipuram",
+      "name": "Kanchipuram",
+      "state": "Tamil Nadu",
+      "lat": 12.8342,
+      "lon": 79.7036,
+      "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "kannur",
+      "name": "Kannur",
+      "state": "Kerala",
+      "lat": 11.8745,
+      "lon": 75.3704,
+      "subdivision_id": "IND-KER"
+    },
+    {
+      "id": "kanpur",
+      "name": "Kanpur",
+      "state": "Uttar Pradesh",
+      "lat": 26.4499,
+      "lon": 80.3319,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "kargil",
+      "name": "Kargil",
+      "state": "Ladakh",
+      "lat": 34.5539,
+      "lon": 76.1349,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "karimnagar",
+      "name": "Karimnagar",
+      "state": "Telangana",
+      "lat": 18.4386,
+      "lon": 79.1288,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "karnal",
+      "name": "Karnal",
+      "state": "Haryana",
+      "lat": 29.6857,
+      "lon": 76.9905,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "kasaragod",
+      "name": "Kasaragod",
+      "state": "Kerala",
+      "lat": 12.4996,
+      "lon": 74.9869,
+      "subdivision_id": "IND-KER"
+    },
+    {
+      "id": "kathua",
+      "name": "Kathua",
+      "state": "Jammu & Kashmir",
+      "lat": 32.3855,
+      "lon": 75.519,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "katihar",
+      "name": "Katihar",
+      "state": "Bihar",
+      "lat": 25.5541,
+      "lon": 87.5684,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "kavaratti",
+      "name": "Kavaratti",
+      "state": "Lakshadweep",
+      "lat": 10.5669,
+      "lon": 72.642,
+      "subdivision_id": "IND-KER"
+    },
+    {
+      "id": "khammam",
+      "name": "Khammam",
+      "state": "Telangana",
+      "lat": 17.2473,
+      "lon": 80.1514,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "kharagpur",
+      "name": "Kharagpur",
+      "state": "West Bengal",
+      "lat": 22.346,
+      "lon": 87.232,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "kochi",
+      "name": "Kochi",
+      "state": "Kerala",
+      "lat": 9.9312,
+      "lon": 76.2673,
+      "subdivision_id": "IND-KER"
+    },
+    {
+      "id": "kohima",
+      "name": "Kohima",
+      "state": "Nagaland",
+      "lat": 25.6751,
+      "lon": 94.1086,
+      "subdivision_id": "IND-NE"
+    },
+    {
+      "id": "kolhapur",
+      "name": "Kolhapur",
+      "state": "Maharashtra",
+      "lat": 16.705,
+      "lon": 74.2433,
+      "subdivision_id": "IND-MAH-DESH"
+    },
+    {
+      "id": "kolkata",
+      "name": "Kolkata",
+      "state": "West Bengal",
+      "lat": 22.5726,
+      "lon": 88.3639,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "kollam",
+      "name": "Kollam",
+      "state": "Kerala",
+      "lat": 8.8932,
+      "lon": 76.6141,
+      "subdivision_id": "IND-KER"
+    },
+    {
+      "id": "korba",
+      "name": "Korba",
+      "state": "Chhattisgarh",
+      "lat": 22.3595,
+      "lon": 82.7501,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "kota",
+      "name": "Kota",
+      "state": "Rajasthan",
+      "lat": 25.2138,
+      "lon": 75.8648,
+      "subdivision_id": "IND-RAJ"
+    },
+    {
+      "id": "kottayam",
+      "name": "Kottayam",
+      "state": "Kerala",
+      "lat": 9.5916,
+      "lon": 76.5222,
+      "subdivision_id": "IND-KER"
+    },
+    {
+      "id": "kozhikode",
+      "name": "Kozhikode",
+      "state": "Kerala",
+      "lat": 11.2588,
+      "lon": 75.7804,
+      "subdivision_id": "IND-KER"
+    },
+    {
+      "id": "kullu",
+      "name": "Kullu",
+      "state": "Himachal Pradesh",
+      "lat": 31.9579,
+      "lon": 77.1095,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "kurnool",
+      "name": "Kurnool",
+      "state": "Andhra Pradesh",
+      "lat": 15.8281,
+      "lon": 78.0373,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "lakhimpur",
+      "name": "Lakhimpur Kheri",
+      "state": "Uttar Pradesh",
+      "lat": 27.9469,
+      "lon": 80.7786,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "latur",
+      "name": "Latur",
+      "state": "Maharashtra",
+      "lat": 18.4088,
+      "lon": 76.5604,
+      "subdivision_id": "IND-MAH-DESH"
+    },
+    {
+      "id": "leh",
+      "name": "Leh",
+      "state": "Ladakh",
+      "lat": 34.1526,
+      "lon": 77.5771,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "lucknow",
+      "name": "Lucknow",
+      "state": "Uttar Pradesh",
+      "lat": 26.8467,
+      "lon": 80.9462,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "ludhiana",
+      "name": "Ludhiana",
+      "state": "Punjab",
+      "lat": 30.901,
+      "lon": 75.8573,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "madurai",
+      "name": "Madurai",
+      "state": "Tamil Nadu",
+      "lat": 9.9252,
+      "lon": 78.1198,
+      "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "malappuram",
+      "name": "Malappuram",
+      "state": "Kerala",
+      "lat": 11.051,
+      "lon": 76.0711,
+      "subdivision_id": "IND-KER"
+    },
+    {
+      "id": "malda",
+      "name": "Malda",
+      "state": "West Bengal",
+      "lat": 25.0108,
+      "lon": 88.1411,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "manali",
+      "name": "Manali",
+      "state": "Himachal Pradesh",
+      "lat": 32.2432,
+      "lon": 77.1892,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "mandi",
+      "name": "Mandi",
+      "state": "Himachal Pradesh",
+      "lat": 31.7087,
+      "lon": 76.932,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "mangalore",
+      "name": "Mangalore",
+      "state": "Karnataka",
+      "lat": 12.9141,
+      "lon": 74.856,
+      "subdivision_id": "IND-KAR"
+    },
+    {
+      "id": "mangaluru",
+      "name": "Mangaluru",
+      "state": "Karnataka",
+      "lat": 12.9141,
+      "lon": 74.856,
+      "subdivision_id": "IND-KAR"
+    },
+    {
+      "id": "mapusa",
+      "name": "Mapusa",
+      "state": "Goa",
+      "lat": 15.5937,
+      "lon": 73.8142,
+      "subdivision_id": "IND-KON-GOA"
+    },
+    {
+      "id": "margao",
+      "name": "Margao",
+      "state": "Goa",
+      "lat": 15.2832,
+      "lon": 73.9862,
+      "subdivision_id": "IND-KON-GOA"
+    },
+    {
+      "id": "mathura",
+      "name": "Mathura",
+      "state": "Uttar Pradesh",
+      "lat": 27.4924,
+      "lon": 77.6737,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "meerut",
+      "name": "Meerut",
+      "state": "Uttar Pradesh",
+      "lat": 28.9845,
+      "lon": 77.7064,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "mirzapur",
+      "name": "Mirzapur",
+      "state": "Uttar Pradesh",
+      "lat": 25.146,
+      "lon": 82.569,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "mohali",
+      "name": "Mohali",
+      "state": "Punjab",
+      "lat": 30.7046,
+      "lon": 76.7179,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "moradabad",
+      "name": "Moradabad",
+      "state": "Uttar Pradesh",
+      "lat": 28.8386,
+      "lon": 78.7733,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "morbi",
+      "name": "Morbi",
+      "state": "Gujarat",
+      "lat": 22.812,
+      "lon": 70.8378,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "motihari",
+      "name": "Motihari",
+      "state": "Bihar",
+      "lat": 26.6469,
+      "lon": 84.9089,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "mumbai",
+      "name": "Mumbai",
+      "state": "Maharashtra",
+      "lat": 19.076,
+      "lon": 72.8777,
+      "subdivision_id": "IND-KON-GOA"
+    },
+    {
+      "id": "muzaffarnagar",
+      "name": "Muzaffarnagar",
+      "state": "Uttar Pradesh",
+      "lat": 29.4727,
+      "lon": 77.7085,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "muzaffarpur",
+      "name": "Muzaffarpur",
+      "state": "Bihar",
+      "lat": 26.1209,
+      "lon": 85.3647,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "mysore",
+      "name": "Mysore",
+      "state": "Karnataka",
+      "lat": 12.2958,
+      "lon": 76.6394,
+      "subdivision_id": "IND-KAR"
+    },
+    {
+      "id": "mysuru",
+      "name": "Mysuru",
+      "state": "Karnataka",
+      "lat": 12.2958,
+      "lon": 76.6394,
+      "subdivision_id": "IND-KAR"
+    },
+    {
+      "id": "nagaon",
+      "name": "Nagaon",
+      "state": "Assam",
+      "lat": 26.3467,
+      "lon": 92.684,
+      "subdivision_id": "IND-NE"
+    },
+    {
+      "id": "nagpur",
+      "name": "Nagpur",
+      "state": "Maharashtra",
+      "lat": 21.1458,
+      "lon": 79.0882,
+      "subdivision_id": "IND-MAH-DESH"
+    },
+    {
+      "id": "nainital",
+      "name": "Nainital",
+      "state": "Uttarakhand",
+      "lat": 29.3919,
+      "lon": 79.4542,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "nanded",
+      "name": "Nanded",
+      "state": "Maharashtra",
+      "lat": 19.1383,
+      "lon": 77.321,
+      "subdivision_id": "IND-MAH-DESH"
+    },
+    {
+      "id": "nashik",
+      "name": "Nashik",
+      "state": "Maharashtra",
+      "lat": 19.9975,
+      "lon": 73.7898,
+      "subdivision_id": "IND-MAH-DESH"
+    },
+    {
+      "id": "navi-mumbai",
+      "name": "Navi Mumbai",
+      "state": "Maharashtra",
+      "lat": 19.033,
+      "lon": 73.0297,
+      "subdivision_id": "IND-KON-GOA"
+    },
+    {
+      "id": "navsari",
+      "name": "Navsari",
+      "state": "Gujarat",
+      "lat": 20.9467,
+      "lon": 72.952,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "nellore",
+      "name": "Nellore",
+      "state": "Andhra Pradesh",
+      "lat": 14.4426,
+      "lon": 79.9865,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "delhi",
+      "name": "New Delhi",
+      "state": "Delhi",
+      "lat": 28.6139,
+      "lon": 77.209,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "new-delhi",
+      "name": "New Delhi",
+      "state": "Delhi",
+      "lat": 28.6139,
+      "lon": 77.209,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "nizamabad",
+      "name": "Nizamabad",
+      "state": "Telangana",
+      "lat": 18.6725,
+      "lon": 78.0941,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "noida",
+      "name": "Noida",
+      "state": "Uttar Pradesh",
+      "lat": 28.5355,
+      "lon": 77.391,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "ongole",
+      "name": "Ongole",
+      "state": "Andhra Pradesh",
+      "lat": 15.5057,
+      "lon": 80.0499,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "palakkad",
+      "name": "Palakkad",
+      "state": "Kerala",
+      "lat": 10.7867,
+      "lon": 76.6548,
+      "subdivision_id": "IND-KER"
+    },
+    {
+      "id": "pali",
+      "name": "Pali",
+      "state": "Rajasthan",
+      "lat": 25.7711,
+      "lon": 73.3234,
+      "subdivision_id": "IND-RAJ"
+    },
+    {
+      "id": "panaji",
+      "name": "Panaji (Goa)",
+      "state": "Goa",
+      "lat": 15.4909,
+      "lon": 73.8278,
+      "subdivision_id": "IND-KON-GOA"
+    },
+    {
+      "id": "panipat",
+      "name": "Panipat",
+      "state": "Haryana",
+      "lat": 29.3909,
+      "lon": 76.9635,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "parbhani",
+      "name": "Parbhani",
+      "state": "Maharashtra",
+      "lat": 19.2608,
+      "lon": 76.7748,
+      "subdivision_id": "IND-MAH-DESH"
+    },
+    {
+      "id": "pathankot",
+      "name": "Pathankot",
+      "state": "Punjab",
+      "lat": 32.2684,
+      "lon": 75.6499,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "patiala",
+      "name": "Patiala",
+      "state": "Punjab",
+      "lat": 30.3398,
+      "lon": 76.3869,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "patna",
+      "name": "Patna",
+      "state": "Bihar",
+      "lat": 25.5941,
+      "lon": 85.1376,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "pilibhit",
+      "name": "Pilibhit",
+      "state": "Uttar Pradesh",
+      "lat": 28.6253,
+      "lon": 79.8037,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "pimpri-chinchwad",
+      "name": "Pimpri-Chinchwad",
+      "state": "Maharashtra",
+      "lat": 18.6298,
+      "lon": 73.7997,
+      "subdivision_id": "IND-MAH-DESH"
+    },
+    {
+      "id": "porbandar",
+      "name": "Porbandar",
+      "state": "Gujarat",
+      "lat": 21.6417,
+      "lon": 69.6293,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "port-blair",
+      "name": "Port Blair",
+      "state": "Andaman and Nicobar Islands",
+      "lat": 11.6234,
+      "lon": 92.7265,
+      "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "prayagraj",
+      "name": "Prayagraj",
+      "state": "Uttar Pradesh",
+      "lat": 25.4358,
+      "lon": 81.8463,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "puducherry",
+      "name": "Puducherry",
+      "state": "Puducherry",
+      "lat": 11.9416,
+      "lon": 79.8083,
+      "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "pune",
+      "name": "Pune",
+      "state": "Maharashtra",
+      "lat": 18.5204,
+      "lon": 73.8567,
+      "subdivision_id": "IND-MAH-DESH"
+    },
+    {
+      "id": "puri",
+      "name": "Puri",
+      "state": "Odisha",
+      "lat": 19.8135,
+      "lon": 85.8312,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "purnia",
+      "name": "Purnia",
+      "state": "Bihar",
+      "lat": 25.7771,
+      "lon": 87.4753,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "rae-bareli",
+      "name": "Rae Bareli",
+      "state": "Uttar Pradesh",
+      "lat": 26.2303,
+      "lon": 81.2409,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "raipur",
+      "name": "Raipur",
+      "state": "Chhattisgarh",
+      "lat": 21.2514,
+      "lon": 81.6296,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "rajahmundry",
+      "name": "Rajahmundry",
+      "state": "Andhra Pradesh",
+      "lat": 17.0005,
+      "lon": 81.804,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "rajkot",
+      "name": "Rajkot",
+      "state": "Gujarat",
+      "lat": 22.3039,
+      "lon": 70.8022,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "rajnandgaon",
+      "name": "Rajnandgaon",
+      "state": "Chhattisgarh",
+      "lat": 21.0973,
+      "lon": 81.0336,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "ramagundam",
+      "name": "Ramagundam",
+      "state": "Telangana",
+      "lat": 18.7551,
+      "lon": 79.5135,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "rampur",
+      "name": "Rampur",
+      "state": "Uttar Pradesh",
+      "lat": 28.8154,
+      "lon": 79.0253,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "ranchi",
+      "name": "Ranchi",
+      "state": "Jharkhand",
+      "lat": 23.3441,
+      "lon": 85.3096,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "ranipet",
+      "name": "Ranipet",
+      "state": "Tamil Nadu",
+      "lat": 12.9272,
+      "lon": 79.333,
+      "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "ratlam",
+      "name": "Ratlam",
+      "state": "Madhya Pradesh",
+      "lat": 23.3315,
+      "lon": 75.0367,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "ratnagiri",
+      "name": "Ratnagiri",
+      "state": "Maharashtra",
+      "lat": 16.9902,
+      "lon": 73.312,
+      "subdivision_id": "IND-KON-GOA"
+    },
+    {
+      "id": "rewa",
+      "name": "Rewa",
+      "state": "Madhya Pradesh",
+      "lat": 24.5373,
+      "lon": 81.3042,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "rishikesh",
+      "name": "Rishikesh",
+      "state": "Uttarakhand",
+      "lat": 30.0869,
+      "lon": 78.2676,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "rohtak",
+      "name": "Rohtak",
+      "state": "Haryana",
+      "lat": 28.8955,
+      "lon": 76.6066,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "roorkee",
+      "name": "Roorkee",
+      "state": "Uttarakhand",
+      "lat": 29.8543,
+      "lon": 77.888,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "rourkela",
+      "name": "Rourkela",
+      "state": "Odisha",
+      "lat": 22.2604,
+      "lon": 84.8536,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "rudrapur",
+      "name": "Rudrapur",
+      "state": "Uttarakhand",
+      "lat": 28.9774,
+      "lon": 79.4004,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "sagar",
+      "name": "Sagar",
+      "state": "Madhya Pradesh",
+      "lat": 23.8388,
+      "lon": 78.7378,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "saharanpur",
+      "name": "Saharanpur",
+      "state": "Uttar Pradesh",
+      "lat": 29.964,
+      "lon": 77.546,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "salem",
+      "name": "Salem",
+      "state": "Tamil Nadu",
+      "lat": 11.6643,
+      "lon": 78.146,
+      "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "sambalpur",
+      "name": "Sambalpur",
+      "state": "Odisha",
+      "lat": 21.4669,
+      "lon": 83.9812,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "satara",
+      "name": "Satara",
+      "state": "Maharashtra",
+      "lat": 17.6805,
+      "lon": 74.0183,
+      "subdivision_id": "IND-MAH-DESH"
+    },
+    {
+      "id": "satna",
+      "name": "Satna",
+      "state": "Madhya Pradesh",
+      "lat": 24.6005,
+      "lon": 80.8322,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "shahjahanpur",
+      "name": "Shahjahanpur",
+      "state": "Uttar Pradesh",
+      "lat": 27.8805,
+      "lon": 79.912,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "shillong",
+      "name": "Shillong",
+      "state": "Meghalaya",
+      "lat": 25.5788,
+      "lon": 91.8933,
+      "subdivision_id": "IND-NE"
+    },
+    {
+      "id": "shimla",
+      "name": "Shimla",
+      "state": "Himachal Pradesh",
+      "lat": 31.1048,
+      "lon": 77.1734,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "shivamogga",
+      "name": "Shivamogga",
+      "state": "Karnataka",
+      "lat": 13.9299,
+      "lon": 75.5681,
+      "subdivision_id": "IND-KAR"
+    },
+    {
+      "id": "sikar",
+      "name": "Sikar",
+      "state": "Rajasthan",
+      "lat": 27.6094,
+      "lon": 75.1399,
+      "subdivision_id": "IND-RAJ"
+    },
+    {
+      "id": "silchar",
+      "name": "Silchar",
+      "state": "Assam",
+      "lat": 24.8333,
+      "lon": 92.7789,
+      "subdivision_id": "IND-NE"
+    },
+    {
+      "id": "siliguri",
+      "name": "Siliguri",
+      "state": "West Bengal",
+      "lat": 26.7271,
+      "lon": 88.3953,
+      "subdivision_id": "IND-WB-ODI"
+    },
+    {
+      "id": "silvassa",
+      "name": "Silvassa",
+      "state": "Dadra & Nagar Haveli and Daman & Diu",
+      "lat": 20.2763,
+      "lon": 73.0083,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "singrauli",
+      "name": "Singrauli",
+      "state": "Madhya Pradesh",
+      "lat": 24.1993,
+      "lon": 82.6645,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "sitapur",
+      "name": "Sitapur",
+      "state": "Uttar Pradesh",
+      "lat": 27.5684,
+      "lon": 80.6829,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "solan",
+      "name": "Solan",
+      "state": "Himachal Pradesh",
+      "lat": 30.9045,
+      "lon": 77.0967,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "solapur",
+      "name": "Solapur",
+      "state": "Maharashtra",
+      "lat": 17.6599,
+      "lon": 75.9064,
+      "subdivision_id": "IND-MAH-DESH"
+    },
+    {
+      "id": "sonipat",
+      "name": "Sonipat",
+      "state": "Haryana",
+      "lat": 28.9931,
+      "lon": 77.0151,
+      "subdivision_id": "IND-NW-PLN"
+    },
+    {
+      "id": "sri-ganganagar",
+      "name": "Sri Ganganagar",
+      "state": "Rajasthan",
+      "lat": 29.9038,
+      "lon": 73.8772,
+      "subdivision_id": "IND-RAJ"
+    },
+    {
+      "id": "srinagar",
+      "name": "Srinagar",
+      "state": "Jammu & Kashmir",
+      "lat": 34.0837,
+      "lon": 74.7973,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "sultanpur",
+      "name": "Sultanpur",
+      "state": "Uttar Pradesh",
+      "lat": 26.2648,
+      "lon": 82.0727,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "surat",
+      "name": "Surat",
+      "state": "Gujarat",
+      "lat": 21.1702,
+      "lon": 72.8311,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "surendranagar",
+      "name": "Surendranagar",
+      "state": "Gujarat",
+      "lat": 22.7275,
+      "lon": 71.637,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "tezpur",
+      "name": "Tezpur",
+      "state": "Assam",
+      "lat": 26.6528,
+      "lon": 92.7926,
+      "subdivision_id": "IND-NE"
+    },
+    {
+      "id": "thane",
+      "name": "Thane",
+      "state": "Maharashtra",
+      "lat": 19.2183,
+      "lon": 72.9781,
+      "subdivision_id": "IND-KON-GOA"
+    },
+    {
+      "id": "thanjavur",
+      "name": "Thanjavur",
+      "state": "Tamil Nadu",
+      "lat": 10.787,
+      "lon": 79.1378,
+      "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "thiruvananthapuram",
+      "name": "Thiruvananthapuram",
+      "state": "Kerala",
+      "lat": 8.5241,
+      "lon": 76.9366,
+      "subdivision_id": "IND-KER"
+    },
+    {
+      "id": "thoothukudi",
+      "name": "Thoothukudi",
+      "state": "Tamil Nadu",
+      "lat": 8.7642,
+      "lon": 78.1348,
+      "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "thrissur",
+      "name": "Thrissur",
+      "state": "Kerala",
+      "lat": 10.5276,
+      "lon": 76.2144,
+      "subdivision_id": "IND-KER"
+    },
+    {
+      "id": "tiruchirappalli",
+      "name": "Tiruchirappalli",
+      "state": "Tamil Nadu",
+      "lat": 10.7905,
+      "lon": 78.7047,
+      "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "tirunelveli",
+      "name": "Tirunelveli",
+      "state": "Tamil Nadu",
+      "lat": 8.7139,
+      "lon": 77.7567,
+      "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "tirupati",
+      "name": "Tirupati",
+      "state": "Andhra Pradesh",
+      "lat": 13.6288,
+      "lon": 79.4192,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "tiruppur",
+      "name": "Tiruppur",
+      "state": "Tamil Nadu",
+      "lat": 11.1085,
+      "lon": 77.3411,
+      "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "tumakuru",
+      "name": "Tumakuru",
+      "state": "Karnataka",
+      "lat": 13.3379,
+      "lon": 77.1006,
+      "subdivision_id": "IND-KAR"
+    },
+    {
+      "id": "udaipur",
+      "name": "Udaipur",
+      "state": "Rajasthan",
+      "lat": 24.5854,
+      "lon": 73.7125,
+      "subdivision_id": "IND-RAJ"
+    },
+    {
+      "id": "udhampur",
+      "name": "Udhampur",
+      "state": "Jammu & Kashmir",
+      "lat": 32.925,
+      "lon": 75.1416,
+      "subdivision_id": "IND-NW-HIM"
+    },
+    {
+      "id": "udupi",
+      "name": "Udupi",
+      "state": "Karnataka",
+      "lat": 13.3409,
+      "lon": 74.7421,
+      "subdivision_id": "IND-KAR"
+    },
+    {
+      "id": "ujjain",
+      "name": "Ujjain",
+      "state": "Madhya Pradesh",
+      "lat": 23.1765,
+      "lon": 75.7885,
+      "subdivision_id": "IND-CEN-MP"
+    },
+    {
+      "id": "unnao",
+      "name": "Unnao",
+      "state": "Uttar Pradesh",
+      "lat": 26.5458,
+      "lon": 80.4878,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "vadodara",
+      "name": "Vadodara",
+      "state": "Gujarat",
+      "lat": 22.3072,
+      "lon": 73.1812,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "valsad",
+      "name": "Valsad",
+      "state": "Gujarat",
+      "lat": 20.5992,
+      "lon": 72.9342,
+      "subdivision_id": "IND-GUJ"
+    },
+    {
+      "id": "varanasi",
+      "name": "Varanasi",
+      "state": "Uttar Pradesh",
+      "lat": 25.3176,
+      "lon": 82.9739,
+      "subdivision_id": "IND-UP-BIH"
+    },
+    {
+      "id": "vasco-da-gama",
+      "name": "Vasco da Gama",
+      "state": "Goa",
+      "lat": 15.3982,
+      "lon": 73.8113,
+      "subdivision_id": "IND-KON-GOA"
+    },
+    {
+      "id": "vellore",
+      "name": "Vellore",
+      "state": "Tamil Nadu",
+      "lat": 12.9165,
+      "lon": 79.1325,
+      "subdivision_id": "IND-TN"
+    },
+    {
+      "id": "vijayawada",
+      "name": "Vijayawada",
+      "state": "Andhra Pradesh",
+      "lat": 16.5062,
+      "lon": 80.648,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "visakhapatnam",
+      "name": "Visakhapatnam",
+      "state": "Andhra Pradesh",
+      "lat": 17.6868,
+      "lon": 83.2185,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "vizianagaram",
+      "name": "Vizianagaram",
+      "state": "Andhra Pradesh",
+      "lat": 18.1133,
+      "lon": 83.4072,
+      "subdivision_id": "IND-TEL-AP"
+    },
+    {
+      "id": "warangal",
+      "name": "Warangal",
+      "state": "Telangana",
+      "lat": 17.9689,
+      "lon": 79.5941,
+      "subdivision_id": "IND-TEL-AP"
     }
   ]
 }

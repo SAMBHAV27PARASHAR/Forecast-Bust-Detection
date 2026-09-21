@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { postCustomPrediction } from '../services/api';
 
 export default function WhatIfSimulator({ onSimulationResult }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
 

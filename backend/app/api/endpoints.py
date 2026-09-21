@@ -50,7 +50,16 @@ def get_risk_map(
     date: Optional[str] = Query(default=None, description="Selected forecast ISO date (e.g. 2026-09-22)")
 ):
     """Returns nationwide confidence map, bust probability grid, and aggregate metrics for an exact forecast valid time."""
-    return data_service.get_risk_map(day=day, scenario_id=scenario, valid_hour=valid_hour, lead_hours=lead_hours, date=date)
+    p_day = day.default if hasattr(day, "default") else day
+    p_scen = scenario.default if hasattr(scenario, "default") else scenario
+    p_vh = valid_hour.default if hasattr(valid_hour, "default") else valid_hour
+    p_lh = lead_hours.default if hasattr(lead_hours, "default") else lead_hours
+    p_date = date.default if hasattr(date, "default") else date
+    return data_service.get_risk_map(day=p_day if isinstance(p_day, int) else 5, 
+                                      scenario_id=p_scen if isinstance(p_scen, str) else "monsoon_depression_bust", 
+                                      valid_hour=p_vh if isinstance(p_vh, int) else None, 
+                                      lead_hours=p_lh if isinstance(p_lh, int) else None, 
+                                      date=p_date if isinstance(p_date, str) else None)
 
 @router.get("/forecast/{region_id}")
 def get_region_forecast(
@@ -62,7 +71,17 @@ def get_region_forecast(
     date: Optional[str] = Query(default=None)
 ):
     """Returns detailed weather variables, simulated observations, and ML explainability for a region at an exact forecast valid time."""
-    return data_service.get_forecast_detail(region_id=region_id, day=day, scenario_id=scenario, valid_hour=valid_hour, lead_hours=lead_hours, date=date)
+    p_day = day.default if hasattr(day, "default") else day
+    p_scen = scenario.default if hasattr(scenario, "default") else scenario
+    p_vh = valid_hour.default if hasattr(valid_hour, "default") else valid_hour
+    p_lh = lead_hours.default if hasattr(lead_hours, "default") else lead_hours
+    p_date = date.default if hasattr(date, "default") else date
+    return data_service.get_forecast_detail(region_id=region_id, 
+                                            day=p_day if isinstance(p_day, int) else 5, 
+                                            scenario_id=p_scen if isinstance(p_scen, str) else "monsoon_depression_bust", 
+                                            valid_hour=p_vh if isinstance(p_vh, int) else None, 
+                                            lead_hours=p_lh if isinstance(p_lh, int) else None, 
+                                            date=p_date if isinstance(p_date, str) else None)
 
 @router.get("/lead-time-curve", response_model=LeadTimeCurveResponse)
 def get_lead_time_curve(
@@ -170,6 +189,24 @@ def get_live_status():
     return live_gefs_service.get_status()
 
 
+@router.get("/live/forecast")
+def get_live_forecast_overview(
+    region_id: str = Query(default="IND-UP-BIH", description="Meteorological subdivision identifier"),
+    day: int = Query(default=1, ge=0, le=10, description="Forecast horizon day (0-10)"),
+    valid_hour: Optional[int] = Query(default=0, description="Valid hour (0-21)"),
+    date: Optional[str] = Query(default=None, description="Valid date YYYY-MM-DD")
+):
+    """
+    Returns unified operational GEFS forecast for Days 0-10 at the subdivision/national overview level.
+    Provides complete 10-day series, meteorological variables, ensemble spread, and bust probabilities.
+    """
+    from ..services.live_gefs_service import live_gefs_service
+    fc = live_gefs_service.get_subdivision_forecast(region_id, day=day, valid_hour=valid_hour or 0, date=date)
+    if not fc:
+        raise HTTPException(status_code=404, detail=f"Live forecast for region '{region_id}' unavailable.")
+    return fc
+
+
 @router.post("/live/refresh")
 def trigger_live_refresh():
     """Triggers on-demand re-poll and download of latest NOAA GEFS cycle."""
@@ -199,6 +236,7 @@ def get_cities_list():
 
 
 @router.get("/city-forecast/{city_id}")
+@router.get("/forecast/city/{city_id}")
 def get_city_forecast_endpoint(
     city_id: str,
     day: int = Query(default=1, ge=0, le=10),
@@ -208,10 +246,52 @@ def get_city_forecast_endpoint(
     lon: Optional[float] = Query(default=None, description="Actual longitude of the location")
 ):
     """Returns 10-day forecast time series for a specific Indian city with optional coordinate precision."""
-    fc = data_service.get_city_forecast(city_id, day=day, valid_hour=valid_hour or 0, date=date, lat=lat, lon=lon)
-    if not fc:
-        raise HTTPException(status_code=404, detail=f"City '{city_id}' forecast unavailable.")
+    d = day if isinstance(day, int) else 1
+    vh = valid_hour if isinstance(valid_hour, int) else 0
+    dt = date if isinstance(date, str) else None
+    lt = lat if isinstance(lat, (int, float)) else None
+    ln = lon if isinstance(lon, (int, float)) else None
+    fc = data_service.get_city_forecast(city_id, day=d, valid_hour=vh, date=dt, lat=lt, lon=ln)
+    if not fc or (isinstance(fc, dict) and fc.get("status") in ("CITY_NOT_AVAILABLE", "NOT_FOUND")):
+        raise HTTPException(
+            status_code=404,
+            detail=f"CITY_NOT_AVAILABLE: City '{city_id}' forecast unavailable."
+        )
     return fc
+
+
+@router.get("/verification/historical")
+def get_historical_verification_endpoint(
+    region_id: Optional[str] = Query(default=None, description="Filter by meteorological subdivision ID"),
+    lead_time_days: Optional[int] = Query(default=None, ge=1, le=10, description="Filter by lead time days"),
+    limit: int = Query(default=50, ge=1, le=560, description="Max records to return")
+):
+    """
+    Returns populated historical benchmark verification records from the July 2019 out-of-time dataset.
+    Features ground-truth observations (IMD gridded rainfall & synoptic stations) vs GEFS numerical predictions,
+    verified bust classifications, absolute error deltas, and contingency scores.
+    """
+    df = data_service.real_batch_df
+    if df is None or df.empty:
+        return {"status": "UNAVAILABLE", "records": [], "count": 0}
+
+    filtered = df.copy()
+    if region_id and not hasattr(region_id, "default"):
+        filtered = filtered[filtered["region_id"] == str(region_id)]
+    if isinstance(lead_time_days, int):
+        filtered = filtered[filtered["lead_time_days"] == lead_time_days]
+    actual_limit = limit if isinstance(limit, int) else 50
+
+    records = filtered.head(actual_limit).to_dict(orient="records")
+    return {
+        "status": "VERIFIED_HISTORICAL_ARCHIVE",
+        "benchmark_event": "July 2019 Active Monsoon Spell & Depression",
+        "forecast_source": "NOAA/NCEP GEFS v12 Operational Archive",
+        "observation_source": "IMD High-Resolution Gridded & Synoptic Surface Network",
+        "count": len(records),
+        "total_available": len(filtered),
+        "records": records
+    }
 
 
 @router.get("/model-performance")
@@ -291,40 +371,46 @@ def get_retrospective_verification_endpoint(
     from ..services.observation_service import observation_service
 
     # Resolve target coordinates & location name
-    target_lat = lat
-    target_lon = lon
+    target_lat = float(lat) if isinstance(lat, (int, float)) else (float(lat) if isinstance(lat, str) and lat.strip() else None)
+    target_lon = float(lon) if isinstance(lon, (int, float)) else (float(lon) if isinstance(lon, str) and lon.strip() else None)
     location_name = "Selected Location"
 
-    if city_id:
-        c_id = city_id.lower().replace(" ", "-").replace("_", "-")
-        city_meta = next((c for c in live_gefs_service.cities if c["id"] == c_id or c["name"].lower() == city_id.lower()), None)
+    c_id_str = city_id if isinstance(city_id, str) else None
+    r_id_str = region_id if isinstance(region_id, str) else None
+    d = day if isinstance(day, int) else 0
+    vh = valid_hour if isinstance(valid_hour, int) else 0
+    dt_str = date if isinstance(date, str) else None
+
+    if c_id_str:
+        norm_cid = c_id_str.lower().replace(" ", "-").replace("_", "-")
+        city_meta = next((c for c in live_gefs_service.cities if c["id"] == norm_cid or c["name"].lower() == c_id_str.lower()), None)
         if city_meta:
             if target_lat is None:
                 target_lat = float(city_meta.get("lat", 28.367))
             if target_lon is None:
                 target_lon = float(city_meta.get("lon", 79.4304))
-            location_name = city_meta.get("name", city_id.title())
+            location_name = city_meta.get("name", c_id_str.title())
         else:
             if target_lat is None:
                 target_lat = 28.367
             if target_lon is None:
                 target_lon = 79.4304
-            location_name = city_id.title()
-    elif region_id:
-        reg_meta = next((r for r in live_gefs_service.regions if r["id"] == region_id), None)
+            location_name = c_id_str.title()
+    elif r_id_str:
+        reg_meta = next((r for r in live_gefs_service.regions if r["id"] == r_id_str), None)
         if reg_meta:
             centroid = reg_meta.get("centroid", [22.0, 82.0])
             if target_lat is None:
                 target_lat = float(centroid[0])
             if target_lon is None:
                 target_lon = float(centroid[1])
-            location_name = reg_meta.get("name", region_id)
+            location_name = reg_meta.get("name", r_id_str)
         else:
             if target_lat is None:
                 target_lat = 22.0
             if target_lon is None:
                 target_lon = 82.0
-            location_name = region_id
+            location_name = r_id_str
 
     if target_lat is None or target_lon is None:
         target_lat = 28.367
@@ -333,11 +419,11 @@ def get_retrospective_verification_endpoint(
     # Determine if date is within live dataset available_dates
     meta = live_gefs_service.live_data.get("meta", {}) if live_gefs_service.live_data else {}
     available_dates = meta.get("available_dates", [])
-    avail_date_strings = [d["date"] for d in available_dates]
+    avail_date_strings = [item["date"] for item in available_dates]
 
     # If date is specified and not in live cycle available_dates (e.g. 2026-09-18, 2026-09-17, etc.)
-    if date and date not in avail_date_strings:
-        valid_time_utc = f"{date} {valid_hour:02d}:00 UTC"
+    if dt_str and dt_str not in avail_date_strings:
+        valid_time_utc = f"{dt_str} {vh:02d}:00 UTC"
         retro = observation_service.verify_forecast(target_lat, target_lon, valid_time_utc, None)
         if retro:
             retro["location_name"] = location_name
@@ -351,10 +437,10 @@ def get_retrospective_verification_endpoint(
         }
 
     # Otherwise use live dataset
-    if city_id:
-        fc = live_gefs_service.get_city_forecast(city_id, day=day, valid_hour=valid_hour, date=date, lat=lat, lon=lon)
+    if c_id_str:
+        fc = live_gefs_service.get_city_forecast(c_id_str, day=d, valid_hour=vh, date=dt_str, lat=target_lat, lon=target_lon)
         if not fc:
-            raise HTTPException(status_code=404, detail=f"Forecast for city '{city_id}' unavailable")
+            raise HTTPException(status_code=404, detail=f"Forecast for city '{c_id_str}' unavailable")
         retro = fc.get("retrospective_verification")
         if retro:
             retro["location_name"] = location_name
@@ -367,8 +453,8 @@ def get_retrospective_verification_endpoint(
             "location_name": location_name
         }
 
-    target_region = region_id or "IND-WB-ODI"
-    sub_fc = live_gefs_service.get_subdivision_forecast(target_region, day=day, valid_hour=valid_hour, date=date)
+    target_region = r_id_str or "IND-WB-ODI"
+    sub_fc = live_gefs_service.get_subdivision_forecast(target_region, day=d, valid_hour=vh, date=dt_str)
     if not sub_fc:
         raise HTTPException(status_code=404, detail=f"Forecast for region '{target_region}' unavailable")
     retro = sub_fc.get("retrospective_verification")
@@ -382,3 +468,69 @@ def get_retrospective_verification_endpoint(
         "error": "No observation could be matched for this forecast valid time.",
         "location_name": location_name
     }
+
+
+@router.get("/intelligence/stability")
+def get_forecast_stability_endpoint(
+    region_id: str = Query(default="IND-WB-ODI"),
+    day: int = Query(default=5, ge=0, le=10),
+    scenario: str = Query(default="real_gefs_july2019"),
+    valid_hour: Optional[int] = Query(default=0),
+    lead_hours: Optional[int] = Query(default=None)
+):
+    from ..services.intelligence_service import intelligence_service
+    d = day.default if hasattr(day, "default") else (day if isinstance(day, int) else 5)
+    vh = valid_hour.default if hasattr(valid_hour, "default") else (valid_hour if isinstance(valid_hour, int) else 0)
+    lh = lead_hours.default if hasattr(lead_hours, "default") else (lead_hours if isinstance(lead_hours, int) else None)
+    scen = scenario.default if hasattr(scenario, "default") else (scenario if isinstance(scenario, str) else "real_gefs_july2019")
+    reg = region_id.default if hasattr(region_id, "default") else (region_id if isinstance(region_id, str) else "IND-WB-ODI")
+    return intelligence_service.get_forecast_stability(region_id=reg, day=d, scenario_id=scen, valid_hour=vh, lead_hours=lh)
+
+
+@router.get("/intelligence/what-changed")
+def get_what_changed_endpoint(
+    region_id: str = Query(default="IND-WB-ODI"),
+    day: int = Query(default=5, ge=0, le=10),
+    scenario: str = Query(default="real_gefs_july2019"),
+    valid_hour: Optional[int] = Query(default=0),
+    lead_hours: Optional[int] = Query(default=None)
+):
+    from ..services.intelligence_service import intelligence_service
+    d = day.default if hasattr(day, "default") else (day if isinstance(day, int) else 5)
+    vh = valid_hour.default if hasattr(valid_hour, "default") else (valid_hour if isinstance(valid_hour, int) else 0)
+    lh = lead_hours.default if hasattr(lead_hours, "default") else (lead_hours if isinstance(lead_hours, int) else None)
+    scen = scenario.default if hasattr(scenario, "default") else (scenario if isinstance(scenario, str) else "real_gefs_july2019")
+    reg = region_id.default if hasattr(region_id, "default") else (region_id if isinstance(region_id, str) else "IND-WB-ODI")
+    return intelligence_service.get_what_changed(region_id=reg, day=d, scenario_id=scen, valid_hour=vh, lead_hours=lh)
+
+
+@router.get("/intelligence/fingerprint")
+def get_forecast_bust_fingerprint_endpoint(
+    region_id: str = Query(default="IND-WB-ODI"),
+    day: int = Query(default=5, ge=0, le=10),
+    scenario: str = Query(default="real_gefs_july2019"),
+    valid_hour: Optional[int] = Query(default=0),
+    top_k: int = Query(default=5, ge=1, le=20)
+):
+    from ..services.intelligence_service import intelligence_service
+    d = day.default if hasattr(day, "default") else (day if isinstance(day, int) else 5)
+    vh = valid_hour.default if hasattr(valid_hour, "default") else (valid_hour if isinstance(valid_hour, int) else 0)
+    tk = top_k.default if hasattr(top_k, "default") else (top_k if isinstance(top_k, int) else 5)
+    scen = scenario.default if hasattr(scenario, "default") else (scenario if isinstance(scenario, str) else "real_gefs_july2019")
+    reg = region_id.default if hasattr(region_id, "default") else (region_id if isinstance(region_id, str) else "IND-WB-ODI")
+    return intelligence_service.get_bust_fingerprint(region_id=reg, day=d, scenario_id=scen, valid_hour=vh, top_k=tk)
+
+
+@router.get("/intelligence/overview")
+def get_intelligence_overview_endpoint(
+    region_id: str = Query(default="IND-WB-ODI"),
+    day: int = Query(default=5, ge=0, le=10),
+    scenario: str = Query(default="real_gefs_july2019"),
+    valid_hour: Optional[int] = Query(default=0)
+):
+    from ..services.intelligence_service import intelligence_service
+    d = day.default if hasattr(day, "default") else (day if isinstance(day, int) else 5)
+    vh = valid_hour.default if hasattr(valid_hour, "default") else (valid_hour if isinstance(valid_hour, int) else 0)
+    scen = scenario.default if hasattr(scenario, "default") else (scenario if isinstance(scenario, str) else "real_gefs_july2019")
+    reg = region_id.default if hasattr(region_id, "default") else (region_id if isinstance(region_id, str) else "IND-WB-ODI")
+    return intelligence_service.get_intelligence_overview(region_id=reg, day=d, scenario_id=scen, valid_hour=vh)

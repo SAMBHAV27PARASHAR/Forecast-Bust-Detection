@@ -3,7 +3,12 @@
  * Communicates with FastAPI backend with graceful error handling and local fallback
  */
 
-const API_BASE = 'https://forecast-bust-backend.onrender.com/api';
+const API_BASE = import.meta.env?.VITE_API_BASE || (
+  typeof window !== 'undefined' && window.location.hostname === 'localhost'
+    ? '/api'
+    : 'https://forecast-bust-backend.onrender.com/api'
+);
+
 export async function fetchHealth() {
   try {
     const res = await fetch(`${API_BASE}/health`);
@@ -13,6 +18,16 @@ export async function fetchHealth() {
     console.warn('Backend health check error:', err);
     return { status: 'offline', model_loaded: false };
   }
+}
+
+export async function fetchLiveForecast(regionId = 'IND-UP-BIH', day = 1, validHour = 0, date = null) {
+  let url = `${API_BASE}/live/forecast?region_id=${encodeURIComponent(regionId)}&day=${day}&valid_hour=${validHour}`;
+  if (date) {
+    url += `&date=${encodeURIComponent(date)}`;
+  }
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch operational live forecast for ${regionId}`);
+  return await res.json();
 }
 
 export async function fetchScenarios() {
@@ -155,4 +170,13 @@ export async function fetchRetrospectiveVerification({ cityId, regionId, day = 0
   if (!res.ok) throw new Error('Failed to fetch retrospective verification');
   return await res.json();
 }
+
+export async function fetchHistoricalVerification({ regionId, limit = 50 } = {}) {
+  let url = `${API_BASE}/verification/historical?limit=${limit}`;
+  if (regionId) url += `&region_id=${encodeURIComponent(regionId)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Failed to fetch historical verification');
+  return await res.json();
+}
+
 

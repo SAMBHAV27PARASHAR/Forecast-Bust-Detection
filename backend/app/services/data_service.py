@@ -15,9 +15,21 @@ from .live_gefs_service import live_gefs_service
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.abspath(os.path.join(current_dir, "../../../"))
 
-REGIONS_FILE = os.path.join(root_dir, "data", "india_regions.json")
-SCENARIOS_FILE = os.path.join(root_dir, "data", "sample_forecasts.json")
-REAL_PARQUET_FILE = os.path.join(root_dir, "data", "real_gefs_july2019_batch_training.parquet")
+def _resolve_data_path(filename: str) -> str:
+    candidates = [
+        os.path.join(root_dir, "data", filename),
+        os.path.join(current_dir, "..", "..", "data", filename),
+        os.path.join(os.getcwd(), "data", filename),
+        os.path.join(os.getcwd(), "backend", "data", filename),
+    ]
+    for c in candidates:
+        if os.path.exists(c):
+            return os.path.abspath(c)
+    return os.path.join(root_dir, "data", filename)
+
+REGIONS_FILE = _resolve_data_path("india_regions.json")
+SCENARIOS_FILE = _resolve_data_path("sample_forecasts.json")
+REAL_PARQUET_FILE = _resolve_data_path("real_gefs_july2019_batch_training.parquet")
 
 class DataService:
     def __init__(self):
@@ -499,30 +511,31 @@ class DataService:
         r_info = self.regions_by_id.get(region_id, self.regions_cache[0])
         r_id = r_info["id"]
 
-        # If live_gefs and cached curve exists
-        if (scenario_id == "live_gefs" or not scenario_id) and live_gefs_service.live_data:
-            curves = live_gefs_service.live_data.get("degradation_curves", {})
-            if r_id in curves:
-                return {
-                    "region_id": r_id,
-                    "region_name": r_info["name"],
-                    "scenario_id": "live_gefs",
-                    "curve": curves[r_id].get("curve", [])
-                }
+        zone = r_info.get("zone", "")
+        # Subdivision-specific dispersion and terrain sensitivity
+        zone_disp = 1.35 if ("West" in zone or "Coast" in r_info["name"] or "Ghat" in r_info["name"]) else (1.20 if "East" in zone or "Bay" in r_info["name"] else 0.90)
 
         points = []
         for day in range(1, 11):
             detail = self.get_forecast_detail(r_id, day, scenario_id)
-            pred = detail["prediction"]
-            params = detail["raw_parameters"]
+            pred = detail.get("prediction") or {}
+            params = detail.get("raw_parameters") or {}
+            base_prob = float(pred.get("bust_probability", 5.0))
+            ens_spread = float(params.get("ensemble_spread", 0.5)) + (day - 1) * 0.14 * zone_disp
+            lead_decay = math.exp(-0.082 * (day - 1))
+
+            conf = round(max(18.0, min(97.5, 96.0 * lead_decay - (ens_spread * 3.2) - (base_prob * 0.12))), 1)
+            bust_risk = round(min(94.0, max(base_prob, base_prob + (day - 1) * 3.1 * zone_disp + (ens_spread * 2.4))), 1)
+
             points.append({
                 "day": day,
-                "confidence_score": pred["confidence_score"],
-                "bust_probability": pred["bust_probability"],
-                "risk_level": pred["risk_level"],
+                "lead_time_hours": day * 24,
+                "confidence_score": conf,
+                "bust_probability": bust_risk,
+                "risk_level": "High" if bust_risk >= 60 else ("Elevated" if bust_risk >= 35 else "Low"),
                 "precip_forecast": params.get("precip_forecast", 0.0),
                 "cape_j_kg": params.get("cape_j_kg", 600.0),
-                "ensemble_spread": params.get("ensemble_spread", 1.2)
+                "ensemble_spread": round(ens_spread, 2)
             })
 
         return {
@@ -537,23 +550,28 @@ class DataService:
 
     def get_city_forecast(self, city_id: str, day: int = 1, valid_hour: int = 0, date: Optional[str] = None, lat: Optional[float] = None, lon: Optional[float] = None) -> Optional[Dict[str, Any]]:
         fc = live_gefs_service.get_city_forecast(city_id, day=day, valid_hour=valid_hour, date=date, lat=lat, lon=lon)
-        if fc and fc.get("status") != "UNAVAILABLE":
+        if fc and fc.get("status") not in ("UNAVAILABLE", "CITY_NOT_AVAILABLE"):
             return fc
         # Fallback to parent meteorological subdivision synthesis if live GEFS cache is cold
         return self._get_city_forecast_fallback(city_id, day=day, valid_hour=valid_hour, date=date, lat=lat, lon=lon)
 
-    def _get_city_forecast_fallback(self, city_id: str, day: int = 1, valid_hour: int = 0, date: Optional[str] = None, lat: Optional[float] = None, lon: Optional[float] = None) -> Dict[str, Any]:
+    def _get_city_forecast_fallback(self, city_id: str, day: int = 1, valid_hour: int = 0, date: Optional[str] = None, lat: Optional[float] = None, lon: Optional[float] = None) -> Optional[Dict[str, Any]]:
         """Constructs a fully functional city forecast based on parent meteorological subdivision when live cache is cold."""
-        c_id = city_id.lower().replace(" ", "-").replace("_", "-")
-        cities = self.get_cities()
-        city_meta = next((c for c in cities if c["id"] == c_id or c["name"].lower() == city_id.lower()), None)
+        city_meta = live_gefs_service.find_city(city_id)
         if not city_meta:
-            city_meta = cities[0] if cities else {"id": c_id, "name": city_id.title(), "lat": 28.367, "lon": 79.4304, "subdivision_id": "IND-UP-BIH"}
+            # Strictly NO fallback to another city or Bareilly
+            return None
         city_meta = dict(city_meta)
-        if lat is not None:
-            city_meta["lat"] = float(lat)
-        if lon is not None:
-            city_meta["lon"] = float(lon)
+        if isinstance(lat, (int, float)) or (isinstance(lat, str) and str(lat).strip()):
+            try:
+                city_meta["lat"] = float(lat)
+            except Exception:
+                pass
+        if isinstance(lon, (int, float)) or (isinstance(lon, str) and str(lon).strip()):
+            try:
+                city_meta["lon"] = float(lon)
+            except Exception:
+                pass
 
         sub_id = city_meta.get("subdivision_id", "IND-UP-BIH")
         cur_day = max(0, min(10, day))
@@ -576,19 +594,26 @@ class DataService:
                 "lead_hours": d * 24,
                 "temp_degc": p.get("temp_forecast", 28.0),
                 "temp_c": p.get("temp_forecast", 28.0),
+                "temperature": p.get("temp_forecast", 28.0),
                 "precip_mm": p.get("precip_forecast", 0.0),
-                "precip_rate_mm_hr": p.get("precip_forecast", 0.0) / 24.0,
+                "precip_rate_mm_hr": (p.get("precip_forecast", 0.0) / 24.0) if p.get("precip_forecast") is not None else 0.0,
+                "rainfall": p.get("precip_forecast", 0.0),
                 "wind_speed_kmh": round(p.get("wind_shear_850_200", 12.0) * 1.5, 1),
+                "wind_speed": round(p.get("wind_shear_850_200", 12.0) * 1.5, 1),
                 "rh_pct": p.get("rh_850", 65.0),
                 "rh_850": p.get("rh_850", 65.0),
+                "humidity": p.get("rh_850", 65.0),
                 "mslp_hpa": p.get("mslp", 1010.0),
+                "pressure": p.get("mslp", 1010.0),
                 "wind_shear_ms": p.get("wind_shear_850_200", 12.0),
+                "wind_shear": p.get("wind_shear_850_200", 12.0),
                 "cape_j_kg": p.get("cape_j_kg", 600.0),
                 "cape_surface": p.get("cape_j_kg", 600.0),
                 "ensemble_spread": p.get("ensemble_spread", 1.2),
                 "bust_probability": pr.get("bust_probability", 5.0),
                 "confidence_score": pr.get("confidence_score", 95.0),
                 "model_confidence": pr.get("confidence_score", 95.0),
+                "confidence": pr.get("confidence_score", 95.0),
                 "risk_level": pr.get("risk_level", "Low")
             })
 
@@ -621,11 +646,17 @@ class DataService:
             "rh_850": cur_p.get("rh_850", 65.0),
             "rh_pct": cur_p.get("rh_850", 65.0),
             "wind_speed_kmh": round(cur_p.get("wind_shear_850_200", 12.0) * 1.5, 1),
+            "wind_speed": round(cur_p.get("wind_shear_850_200", 12.0) * 1.5, 1),
             "mslp_hpa": cur_p.get("mslp", 1010.0),
+            "pressure": cur_p.get("mslp", 1010.0),
             "cape_surface": cur_p.get("cape_j_kg", 600.0),
+            "cape_j_kg": cur_p.get("cape_j_kg", 600.0),
+            "wind_shear_ms": cur_p.get("wind_shear_850_200", 12.0),
+            "wind_shear": cur_p.get("wind_shear_850_200", 12.0),
             "bust_probability": cur_pr.get("bust_probability", 5.0),
             "confidence_score": cur_pr.get("confidence_score", 95.0),
-            "model_confidence": cur_pr.get("confidence_score", 95.0)
+            "model_confidence": cur_pr.get("confidence_score", 95.0),
+            "risk_level": cur_pr.get("risk_level", "Low")
         }
 
         from .observation_service import observation_service
@@ -655,14 +686,24 @@ class DataService:
             "lead_hours": lead_h,
             "valid_time_utc": val_time_str,
             "temperature": cur_p.get("temp_forecast", 28.0),
+            "temp_c": cur_p.get("temp_forecast", 28.0),
             "rainfall": cur_p.get("precip_forecast", 0.0),
+            "precip_mm": cur_p.get("precip_forecast", 0.0),
             "humidity": cur_p.get("rh_850", 65.0),
+            "rh_850": cur_p.get("rh_850", 65.0),
             "wind_speed": round(cur_p.get("wind_shear_850_200", 12.0) * 1.5, 1),
+            "wind_speed_kmh": round(cur_p.get("wind_shear_850_200", 12.0) * 1.5, 1),
             "pressure": cur_p.get("mslp", 1010.0),
+            "mslp_hpa": cur_p.get("mslp", 1010.0),
             "cape_j_kg": cur_p.get("cape_j_kg", 600.0),
+            "cape_surface": cur_p.get("cape_j_kg", 600.0),
+            "wind_shear": cur_p.get("wind_shear_850_200", 12.0),
+            "wind_shear_ms": cur_p.get("wind_shear_850_200", 12.0),
             "ensemble_spread": cur_p.get("ensemble_spread", 1.2),
             "bust_probability": cur_pr.get("bust_probability", 5.0),
             "confidence": cur_pr.get("confidence_score", 95.0),
+            "confidence_score": cur_pr.get("confidence_score", 95.0),
+            "model_confidence": cur_pr.get("confidence_score", 95.0),
             "risk_level": cur_pr.get("risk_level", "Low"),
             "confidence_level": cur_pr.get("confidence_level", "High Confidence"),
             "dominant_factor": cur_pr.get("dominant_factor", "NWP Ensemble Spread / Variance"),

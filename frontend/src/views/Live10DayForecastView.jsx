@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import LeadTimeSlider from '../components/LeadTimeSlider';
 import IndiaRiskMap from '../components/IndiaRiskMap';
-import { fetchCities, fetchCityForecast } from '../services/api';
+import { fetchCities, fetchCityForecast, fetchForecastDetail } from '../services/api';
 import { formatUtcHourToIst, formatToIst } from '../utils/timezone';
 // Static city data — imported directly so search works immediately (no API race condition)
 import staticCitiesData from '../data/indian_cities.json';
@@ -33,8 +33,8 @@ export default function Live10DayForecastView({
   const validDate = riskMapData?.valid_forecast_time || '2026-09-24';
   const initDate = riskMapData?.initialization_time || '2026-09-19 00:00 UTC';
 
-  // Domain Mode: 'city' (default) or 'subdivision'
-  const [domainMode, setDomainMode] = useState('city');
+  // Domain Mode: 'subdivision' (default for Live 10-Day Operational View)
+  const [domainMode, setDomainMode] = useState('subdivision');
 
   // ── Internal fallback city state ──────────────────────────────────────────
   // Used only when App.jsx does NOT provide city forecast props
@@ -135,10 +135,62 @@ export default function Live10DayForecastView({
     return () => { isMounted = false; };
   }, [selectedCity?.id, selectedDay, selectedHour, selectedDate, propOnSelectCity]);
 
+  // ── Subdivision forecast detail for Days 0-10 overview ────────────────────
+  const [subdivisionDetail, setSubdivisionDetail] = useState(null);
+  const [subdivisionLoading, setSubdivisionLoading] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadSubdivisionForecast() {
+      setSubdivisionLoading(true);
+      try {
+        const detail = await fetchForecastDetail(
+          selectedRegionId || 'IND-UP-BIH',
+          selectedDay,
+          'live_gefs',
+          selectedHour || 0,
+          selectedDate
+        );
+        if (isMounted) setSubdivisionDetail(detail);
+      } catch (err) {
+        console.warn('Could not load subdivision detail:', err);
+      } finally {
+        if (isMounted) setSubdivisionLoading(false);
+      }
+    }
+    loadSubdivisionForecast();
+    return () => { isMounted = false; };
+  }, [selectedRegionId, selectedDay, selectedHour, selectedDate]);
+
   // ── Find active subdivision metadata ─────────────────────────────────────
   const selectedRegion = useMemo(() => {
     return regions.find(r => (r.id || r.region_id) === (selectedCity?.subdivision_id || selectedRegionId));
   }, [regions, selectedCity?.subdivision_id, selectedRegionId]);
+
+  // ── Active day slice from 10-day operational timeline ─────────────────────
+  const activeDayDetail = useMemo(() => {
+    if (!subdivisionDetail) return null;
+    if (Array.isArray(subdivisionDetail.ten_day_forecast)) {
+      const found = subdivisionDetail.ten_day_forecast.find(item => item.day === selectedDay);
+      if (found) {
+        return {
+          ...subdivisionDetail,
+          ...found,
+          temperature: found.temp_c ?? found.temp_degc ?? subdivisionDetail.temperature,
+          rainfall: found.precip_mm ?? subdivisionDetail.rainfall,
+          humidity: found.rh_pct ?? found.rh_850 ?? subdivisionDetail.humidity,
+          wind_speed: found.wind_speed_kmh ?? subdivisionDetail.wind_speed,
+          pressure: found.mslp_hpa ?? subdivisionDetail.pressure,
+          cape_j_kg: found.cape_j_kg ?? subdivisionDetail.cape_j_kg,
+          wind_shear: found.wind_shear_ms ?? subdivisionDetail.wind_shear,
+          ensemble_spread: found.ensemble_spread ?? subdivisionDetail.ensemble_spread,
+          bust_probability: found.bust_probability ?? subdivisionDetail.bust_probability,
+          confidence: found.model_confidence ?? found.confidence_score ?? subdivisionDetail.confidence
+        };
+      }
+    }
+    return subdivisionDetail;
+  }, [subdivisionDetail, selectedDay]);
 
   // ── Derived metrics and risk badge ────────────────────────────────────────
   const currentBustProb = cityForecast?.bust_probability ?? cityForecast?.current_step?.bust_probability ?? null;
@@ -167,7 +219,7 @@ export default function Live10DayForecastView({
         <div className="header-left-block">
           <h2 className="view-title">⏱️ Operational 10-Day NWP Forecast Horizon</h2>
           <p className="view-desc">
-            Medium-range weather forecast progression from +0h (Initialization) to +240h (Day 10). Dynamic point-extraction from live NOAA GEFS across 60+ Indian cities with synchronized meteorological subdivision risk.
+            Medium-range weather forecast progression from +0h (Initialization) to +240h (Day 10). Operational GEFS broad / subdivision-level forecast horizon across 14 meteorological subdivisions with synchronized risk mapping.
           </p>
         </div>
         <div className="header-right-block">
@@ -176,6 +228,19 @@ export default function Live10DayForecastView({
             <span>Cycle (IST): {formatToIst(initDate)}</span>
           </div>
         </div>
+      </div>
+
+      {/* Distinction Bar */}
+      <div className="view-distinction-bar">
+        <span className="distinction-tag">Subdivision Overview</span>
+        <span>Broad All-India Meteorological Subdivision Horizon</span>
+        <button
+          type="button"
+          className="btn-link distinction-link"
+          onClick={() => onNavigateView && onNavigateView('city_forecast')}
+        >
+          Switch to Point-Level City Forecast (119 Cities) 📍 →
+        </button>
       </div>
 
       {/* 1. FORECAST DATE, VALID TIME & INTEGRATED LOCATION CONTROLS */}
@@ -384,18 +449,148 @@ export default function Live10DayForecastView({
         </div>
 
       ) : (
-        /* SUBDIVISION MODE TABLE: 14 Meteorological Subdivisions */
+        /* SUBDIVISION MODE OVERVIEW: Compact 10-Day Timeline + Metrics + 14 Subdivisions Table */
         <div className="subdivision-forecast-card" id="subdivision-forecast-container">
-          <div className="card-header-flex">
+          {/* Top Headline */}
+          <div className="card-header-flex" style={{ marginBottom: '16px' }}>
             <div>
-              <h3>All-India Meteorological Subdivision Forecast (Day {selectedDay}, +{selectedDay * 24}h)</h3>
-              <span className="sub-text">Valid Time: {validDate} • 14 Meteorological Subdivisions Sorted by Bust Probability</span>
+              <h3 style={{ margin: 0, fontSize: '1.2rem', color: '#0f172a', fontWeight: '700' }}>
+                Operational 10-Day Timeline & Subdivision Diagnostics ({selectedRegion?.name || selectedRegionId})
+              </h3>
+              <span className="sub-text" style={{ fontSize: '12px', color: '#64748b' }}>
+                Operational GEFS forecast slices across Days 0–10 • Valid Time: {subdivisionDetail?.valid_time_utc ? formatToIst(subdivisionDetail.valid_time_utc) : validDate}
+              </span>
             </div>
             {onNavigateView && (
-              <button className="btn-secondary" onClick={() => onNavigateView('risk_map')}>
-                Inspect Deep Explainability 🗺️
+              <button className="btn-secondary" onClick={() => onNavigateView('city_forecast')}>
+                Switch to City Forecast Drill-Down 📍
               </button>
             )}
+          </div>
+
+          {/* Compact 10-Day Timeline (D0 through D10) */}
+          <div className="subdivision-timeline-row" style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '12px', marginBottom: '16px' }}>
+            {Array.from({ length: 11 }, (_, i) => i).map((d) => {
+              const isSelected = selectedDay === d;
+              const dObj = subdivisionDetail?.available_dates?.find(ad => ad.day === d)
+                || riskMapData?.available_dates?.find(ad => ad.day === d);
+              const dateLabel = dObj?.short_label || (d === 0 ? 'Init' : `+${d * 24}h`);
+              return (
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => {
+                    setSelectedDay(d);
+                    if (dObj?.date && setSelectedDate) {
+                      setSelectedDate(dObj.date);
+                    }
+                  }}
+                  style={{
+                    flex: '1 0 70px',
+                    padding: '8px 10px',
+                    borderRadius: '8px',
+                    border: isSelected ? '2px solid #2563eb' : '1px solid #e2e8f0',
+                    background: isSelected ? '#eff6ff' : '#ffffff',
+                    cursor: 'pointer',
+                    textAlign: 'center',
+                    boxShadow: isSelected ? '0 2px 4px rgba(37,99,235,0.15)' : 'none',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <div style={{ fontWeight: isSelected ? '700' : '600', color: isSelected ? '#1d4ed8' : '#334155', fontSize: '13px' }}>
+                    {d === 0 ? 'D0' : `D${d}`}
+                  </div>
+                  <div style={{ fontSize: '11px', color: isSelected ? '#2563eb' : '#64748b', marginTop: '2px' }}>
+                    {dateLabel}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Detailed Meteorological Metrics for Selected Day */}
+          <div className="city-exact-metrics-grid" style={{ marginBottom: '24px' }}>
+            <div className="hero-metric-tile">
+              <span className="tile-label">Temperature</span>
+              <span className="tile-value">
+                {activeDayDetail?.temperature != null ? `${Number(activeDayDetail.temperature).toFixed(1)}°C` : subdivisionLoading ? '—' : 'N/A'}
+              </span>
+              <span className="tile-sub">2m Surface Air Temp (GEFS)</span>
+            </div>
+
+            <div className="hero-metric-tile">
+              <span className="tile-label">Rainfall</span>
+              <span className="tile-value text-precip">
+                {activeDayDetail?.rainfall != null ? `${Number(activeDayDetail.rainfall).toFixed(1)} mm` : subdivisionLoading ? '—' : 'N/A'}
+              </span>
+              <span className="tile-sub">
+                {activeDayDetail?.rainfall != null ? `Rate: ${(Number(activeDayDetail.rainfall) / 24.0).toFixed(2)} mm/h` : 'Accumulation'}
+              </span>
+            </div>
+
+            <div className="hero-metric-tile">
+              <span className="tile-label">Relative Humidity</span>
+              <span className="tile-value">
+                {activeDayDetail?.humidity != null ? `${Math.round(activeDayDetail.humidity)}%` : subdivisionLoading ? '—' : 'N/A'}
+              </span>
+              <span className="tile-sub">850hPa Synoptic Level</span>
+            </div>
+
+            <div className="hero-metric-tile">
+              <span className="tile-label">Wind Speed</span>
+              <span className="tile-value">
+                {activeDayDetail?.wind_speed != null ? `${Number(activeDayDetail.wind_speed).toFixed(1)} km/h` : subdivisionLoading ? '—' : 'N/A'}
+              </span>
+              <span className="tile-sub">10m Operational Vector</span>
+            </div>
+
+            <div className="hero-metric-tile">
+              <span className="tile-label">Pressure (MSLP)</span>
+              <span className="tile-value font-mono">
+                {activeDayDetail?.pressure != null ? `${Number(activeDayDetail.pressure).toFixed(1)} hPa` : subdivisionLoading ? '—' : 'N/A'}
+              </span>
+              <span className="tile-sub">Mean Sea Level Pressure</span>
+            </div>
+
+            <div className="hero-metric-tile">
+              <span className="tile-label">CAPE / Instability</span>
+              <span className="tile-value font-mono">
+                {activeDayDetail?.cape_j_kg != null ? `${Math.round(activeDayDetail.cape_j_kg)} J/kg` : subdivisionLoading ? '—' : 'N/A'}
+              </span>
+              <span className="tile-sub">Convective Energy</span>
+            </div>
+
+            <div className="hero-metric-tile">
+              <span className="tile-label">Ensemble Spread</span>
+              <span className="tile-value font-mono">
+                {activeDayDetail?.ensemble_spread != null ? `${Number(activeDayDetail.ensemble_spread).toFixed(2)} σ` : subdivisionLoading ? '—' : 'N/A'}
+              </span>
+              <span className="tile-sub">31-Member Dispersion</span>
+            </div>
+
+            <div className="hero-metric-tile bust-tile">
+              <span className="tile-label">Bust Probability</span>
+              <span className="tile-value text-bust">
+                {activeDayDetail?.bust_probability != null ? `${Number(activeDayDetail.bust_probability).toFixed(1)}%` : subdivisionLoading ? '—' : 'N/A'}
+              </span>
+              <span className="tile-sub">Calibrated Random Forest</span>
+            </div>
+
+            <div className="hero-metric-tile">
+              <span className="tile-label">Model Confidence</span>
+              <span className="tile-value text-conf">
+                {activeDayDetail?.confidence != null ? `${Number(activeDayDetail.confidence).toFixed(1)}%` : subdivisionLoading ? '—' : 'N/A'}
+              </span>
+              <span className="tile-sub">NWP Reliability Score</span>
+            </div>
+
+            <div className="hero-metric-tile">
+              <span className="tile-label">Wind Shear</span>
+              <span className="tile-value font-mono">
+                {activeDayDetail?.wind_shear != null ? `${Number(activeDayDetail.wind_shear).toFixed(1)} m/s` : subdivisionLoading ? '—' : 'N/A'}
+              </span>
+              <span className="tile-sub">850-200 hPa Deep Shear</span>
+            </div>
           </div>
 
           <div className="table-responsive">

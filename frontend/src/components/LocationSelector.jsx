@@ -63,18 +63,15 @@ export default function LocationSelector({
     }
   };
 
-  // Find currently selected city
-  const selectedCity = cities.find(c => c.id === selectedCityId) || cities[0] || {
-    id: 'bareilly',
-    name: 'Bareilly',
-    state: 'Uttar Pradesh',
-    lat: 28.3670,
-    lon: 79.4304,
-    subdivision_id: 'IND-UP-BIH'
-  };
+  // Find currently selected city - do NOT silently fallback to cities[0] or Bareilly if an unknown city is provided
+  const selectedCity = cities.find(c => 
+    c.id === selectedCityId || 
+    (c.name && c.name.toLowerCase() === (selectedCityId || '').toLowerCase()) ||
+    (c.id && c.id.replace(/-/g, '') === (selectedCityId || '').replace(/-/g, ''))
+  ) || null;
 
-  // State selection: defaults to selected city's state or 'Uttar Pradesh'
-  const [selectedState, setSelectedState] = useState(selectedCity?.state || 'Uttar Pradesh');
+  // State selection: defaults to selected city's state or first available
+  const [selectedState, setSelectedState] = useState(selectedCity?.state || (cities[0]?.state || 'Uttar Pradesh'));
   const [searchQuery, setSearchQuery] = useState('');
   const [isCityDropdownOpen, setIsCityDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -107,10 +104,14 @@ export default function LocationSelector({
     return cState === selState;
   });
 
-  // Filter with search/typeahead query
-  const searchableCities = citiesInState.filter(c =>
-    c.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter cities: If user is actively typing a query, search all cities across all Indian states
+  const isSearching = searchQuery.trim().length > 0;
+  const searchableCities = isSearching
+    ? cities.filter(c =>
+        c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (c.state && c.state.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+    : citiesInState;
 
   // Handle state change: automatically pick the first city of that state if available
   const handleStateChange = (e) => {
@@ -135,6 +136,9 @@ export default function LocationSelector({
 
   // Handle city selection
   const handleCitySelect = (city) => {
+    if (city.state) {
+      setSelectedState(city.state);
+    }
     setIsCityDropdownOpen(false);
     setSearchQuery('');
     if (onSelectCity) {
@@ -251,7 +255,9 @@ export default function LocationSelector({
                 {isCityDropdownOpen && (
                   <div className="typeahead-dropdown-menu">
                     <div className="dropdown-section-header">
-                      {citiesInState.length > 0
+                      {isSearching
+                        ? `Search Results (${searchableCities.length})`
+                        : citiesInState.length > 0
                         ? `Cities in ${selectedState} (${searchableCities.length})`
                         : `No cities listed for ${selectedState}`}
                     </div>
@@ -265,7 +271,9 @@ export default function LocationSelector({
                             className={`dropdown-item ${isSelected ? 'selected' : ''}`}
                             onClick={() => handleCitySelect(c)}
                           >
-                            <span className="item-name">{c.name}</span>
+                            <span className="item-name">
+                              {c.name} {isSearching && c.state ? <small style={{ color: '#64748b', marginLeft: '6px' }}>({c.state})</small> : null}
+                            </span>
                             <span className="item-coords">
                               {c.lat?.toFixed(2)}°N, {c.lon?.toFixed(2)}°E
                             </span>
@@ -274,7 +282,7 @@ export default function LocationSelector({
                       })
                     ) : (
                       <div className="dropdown-no-results">
-                        No city matching "{searchQuery}" in {selectedState}
+                        No city matching "{searchQuery}"
                       </div>
                     )}
                   </div>

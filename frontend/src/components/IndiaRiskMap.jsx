@@ -67,6 +67,45 @@ export default function IndiaRiskMap({
   const [hoveredItem, setHoveredItem] = useState(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
 
+  // Interactive Zoom & Pan Controls
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+
+  const handleZoomIn = () => setZoomLevel(prev => Math.min(3.5, Number((prev + 0.35).toFixed(2))));
+  const handleZoomOut = () => {
+    setZoomLevel(prev => {
+      const next = Math.max(1, Number((prev - 0.35).toFixed(2)));
+      if (next === 1) setPanOffset({ x: 0, y: 0 });
+      return next;
+    });
+  };
+  const handleResetZoom = () => {
+    setZoomLevel(1);
+    setPanOffset({ x: 0, y: 0 });
+  };
+
+  const handleMapMouseDown = (e) => {
+    if (zoomLevel > 1 && e.button === 0) {
+      setIsDragging(true);
+      setDragStart({ x: e.clientX - panOffset.x, y: e.clientY - panOffset.y });
+    }
+  };
+
+  const handleMapMouseMove = (e) => {
+    if (isDragging && zoomLevel > 1) {
+      const maxPan = (zoomLevel - 1) * 220;
+      const newX = Math.max(-maxPan, Math.min(maxPan, e.clientX - dragStart.x));
+      const newY = Math.max(-maxPan, Math.min(maxPan, e.clientY - dragStart.y));
+      setPanOffset({ x: newX, y: newY });
+    }
+  };
+
+  const handleMapMouseUp = () => {
+    setIsDragging(false);
+  };
+
   // Map region metadata by ID
   const regionsById = useMemo(() => {
     const map = {};
@@ -198,9 +237,39 @@ export default function IndiaRiskMap({
             <h3>Geographic India Weather-Risk Heatmap</h3>
           </div>
           <div className="map-header-badges">
+            <div className="map-zoom-toolbar">
+              <button
+                type="button"
+                className="map-zoom-btn"
+                onClick={handleZoomIn}
+                title="Zoom In (+)"
+                aria-label="Zoom In"
+              >
+                +
+              </button>
+              <button
+                type="button"
+                className="map-zoom-btn"
+                onClick={handleZoomOut}
+                title="Zoom Out (−)"
+                aria-label="Zoom Out"
+              >
+                −
+              </button>
+              <button
+                type="button"
+                className="map-zoom-btn reset-btn"
+                onClick={handleResetZoom}
+                title="Reset Zoom & Pan"
+                aria-label="Reset Zoom"
+              >
+                ⟲ {Math.round(zoomLevel * 100)}%
+              </button>
+            </div>
+
             <span className={`map-feed-pill ${isRealFeed ? 'real-feed' : 'demo-feed'}`}>
               <span className="dot"></span>
-              {isRealFeed ? 'NOAA GEFS + ERA5 ARCHIVE' : 'DEMO / SAMPLE SIMULATION'}
+              {isRealFeed ? 'NOAA GEFS OPERATIONAL' : 'DEMO / SAMPLE SIMULATION'}
             </span>
             <span className="map-day-indicator">
               Lead Time: <strong>Day {selectedDay} (+{(riskMapData?.forecast_day === selectedDay && riskMapData?.lead_hours !== undefined) ? riskMapData.lead_hours : (selectedDay * 24)}h)</strong>
@@ -213,7 +282,7 @@ export default function IndiaRiskMap({
           </div>
         </div>
         <p className="map-instruction">
-          Continuous gradient heatmap: Color continuously reflects 0% to 100% bust probability. Click any subdivision to inspect ML explainability.
+          Continuous gradient heatmap: Color continuously reflects 0% to 100% bust probability. Click any subdivision to inspect ML explainability. Drag to pan when zoomed.
         </p>
       </div>
 
@@ -222,6 +291,11 @@ export default function IndiaRiskMap({
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           className="india-svg-map"
           aria-label="Geographic Meteorological Reliability Heatmap of India"
+          onMouseDown={handleMapMouseDown}
+          onMouseMove={handleMapMouseMove}
+          onMouseUp={handleMapMouseUp}
+          onMouseLeave={handleMapMouseUp}
+          style={{ cursor: zoomLevel > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default' }}
         >
           <defs>
             <filter id="glow-danger" x="-20%" y="-20%" width="140%" height="140%">
@@ -238,7 +312,15 @@ export default function IndiaRiskMap({
             </filter>
           </defs>
 
-          {/* Latitude / Longitude Graticule lines */}
+          <g
+            className="map-zoomable-container"
+            transform={`translate(${panOffset.x}, ${panOffset.y}) scale(${zoomLevel})`}
+            style={{
+              transformOrigin: '290px 330px',
+              transition: isDragging ? 'none' : 'transform 0.18s cubic-bezier(0.2, 0, 0, 1)'
+            }}
+          >
+            {/* Latitude / Longitude Graticule lines */}
           <g className="tactical-grid" opacity="0.12">
             <line x1="30" y1="120" x2="550" y2="120" stroke="#94a3b8" strokeDasharray="3 4" />
             <line x1="30" y1="240" x2="550" y2="240" stroke="#94a3b8" strokeDasharray="3 4" />
@@ -470,6 +552,7 @@ export default function IndiaRiskMap({
               </g>
             );
           })()}
+          </g>
         </svg>
 
         {/* Floating Tooltip */}

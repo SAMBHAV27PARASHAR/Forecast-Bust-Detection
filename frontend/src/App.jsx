@@ -247,7 +247,7 @@ export default function App() {
 
   return (
     <div className={`app-layout theme-${theme}`}>
-      {/* 3-Line Sidebar (Drawer) */}
+      {/* 3-Line Sidebar (Docked on Desktop, Drawer on Mobile) */}
       <Sidebar
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
@@ -257,17 +257,18 @@ export default function App() {
         liveInitTime={liveInitTime}
       />
 
-      {/* Global Header */}
-      <Header
-        isOnline={isOnline}
-        isLiveMode={isLiveMode}
-        activeScenarioName={activeScenario?.name}
-        liveInitTime={liveInitTime}
-        onToggleSidebar={() => setSidebarOpen(prev => !prev)}
-        theme={theme}
-        onToggleTheme={setTheme}
-        onRefreshLive={handleManualLiveRefresh}
-      />
+      <div className="app-main-content-wrapper">
+        {/* Global Header */}
+        <Header
+          isOnline={isOnline}
+          isLiveMode={isLiveMode}
+          activeScenarioName={activeScenario?.name}
+          liveInitTime={liveInitTime}
+          onToggleSidebar={() => setSidebarOpen(prev => !prev)}
+          theme={theme}
+          onToggleTheme={setTheme}
+          onRefreshLive={handleManualLiveRefresh}
+        />
 
       {/* Operational Scenario Bar (always accessible for switching between Live and Historical) */}
       {scenarios.length > 0 && (
@@ -479,6 +480,7 @@ export default function App() {
           </span>
         </div>
       </footer>
+      </div>
     </div>
   );
 }

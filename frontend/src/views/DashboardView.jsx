@@ -145,31 +145,59 @@ export default function DashboardView({
             selectedRegionDetail={selectedRegionDetail}
           />
 
-          <div className="section-header-row" style={{ marginTop: '1.25rem' }}>
-            <span className="section-title">Forecast Stability Monitor</span>
-            <button className="btn-link" onClick={() => onNavigateView('stability')}>
-              Detailed Run Tracking →
-            </button>
-          </div>
-          <ForecastStabilityMonitor
-            stabilityData={stabilityData}
-            loading={stabilityLoading}
-            regionName={selectedRegionName}
-            selectedDay={selectedDay}
-          />
+          {stabilityData?.has_previous_run ? (
+            <>
+              <div className="section-header-row" style={{ marginTop: '1.25rem' }}>
+                <span className="section-title">Forecast Stability Monitor</span>
+                <button className="btn-link" onClick={() => onNavigateView('stability')}>
+                  Detailed Run Tracking →
+                </button>
+              </div>
+              <ForecastStabilityMonitor
+                stabilityData={stabilityData}
+                loading={stabilityLoading}
+                regionName={selectedRegionName}
+                selectedDay={selectedDay}
+              />
 
-          <div className="section-header-row" style={{ marginTop: '1.25rem' }}>
-            <span className="section-title">What Changed? Run-to-Run Attribution</span>
-            <button className="btn-link" onClick={() => onNavigateView('what_changed')}>
-              Full Attribution Analysis →
-            </button>
-          </div>
-          <WhatChangedCard
-            whatChangedData={whatChangedData}
-            loading={whatChangedLoading}
-            regionName={selectedRegionName}
-            selectedDay={selectedDay}
-          />
+              <div className="section-header-row" style={{ marginTop: '1.25rem' }}>
+                <span className="section-title">What Changed? Run-to-Run Attribution</span>
+                <button className="btn-link" onClick={() => onNavigateView('what_changed')}>
+                  Full Attribution Analysis →
+                </button>
+              </div>
+              <WhatChangedCard
+                whatChangedData={whatChangedData}
+                loading={whatChangedLoading}
+                regionName={selectedRegionName}
+                selectedDay={selectedDay}
+              />
+            </>
+          ) : (
+            <>
+              <div className="section-header-row" style={{ marginTop: '1.25rem' }}>
+                <span className="section-title">Consecutive Run Comparison</span>
+                <button className="btn-link" onClick={() => onNavigateView('stability')}>
+                  Cycle Details →
+                </button>
+              </div>
+              <div className="compact-operational-notice-card">
+                <div className="notice-icon-badge">⏱️</div>
+                <div className="notice-text-content">
+                  <h4>Multi-Cycle Tracking: Available After Next Operational Run</h4>
+                  <p>
+                    Currently operating on single live operational cycle. Run-to-run stability drift and Tree SHAP feature attribution strictly compare two consecutive cycles targeting the same valid forecast time.
+                  </p>
+                  <div className="notice-actions-row">
+                    <span className="badge-status-insufficient">Single Operational Cycle</span>
+                    <button className="btn-sm-secondary" onClick={() => onNavigateView('bust_detection')}>
+                      View ML Bust Diagnostics →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </section>
       </div>
     </div>

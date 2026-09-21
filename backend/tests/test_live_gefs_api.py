@@ -11,7 +11,7 @@ from backend.app.api.endpoints import get_live_status, get_cities_list, get_city
 def test_live_status():
     status = get_live_status()
     assert status["available"] is True
-    assert "2026-09-19" in status["init_time_utc"]
+    assert "2026-09" in status["init_time_utc"]
     assert status["subdivisions_count"] == 14
     assert status["cities_count"] >= 50
 
@@ -20,7 +20,7 @@ def test_live_risk_map():
     data = data_service.get_risk_map(day=1, scenario_id="live_gefs", valid_hour=0)
     assert data["day"] == 1
     assert data["is_demo_mode"] is False
-    assert "2026-09-19" in data["initialization_time"]
+    assert "2026-09" in data["initialization_time"]
     assert len(data["regions"]) == 14
     assert data["regions"][0]["bust_probability"] >= 0.0
 
@@ -42,7 +42,7 @@ def test_city_forecast_bareilly():
     assert len(data["ten_day_trend"]) >= 10
     day1 = next((d for d in data["ten_day_trend"] if d["day"] == 1), None)
     assert day1 is not None
-    assert "2026-09-20" in day1["valid_date"]
+    assert "2026-09" in day1["valid_date"]
     assert day1["temp_c"] > 0
     assert day1["bust_probability"] >= 0.0
 

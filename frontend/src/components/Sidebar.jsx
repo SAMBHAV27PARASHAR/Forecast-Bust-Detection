@@ -79,7 +79,9 @@ export default function Sidebar({ isOpen, onClose, activeView, onSelectView, isL
                         className={`nav-item-btn ${isActive ? 'active' : ''}`}
                         onClick={() => {
                           onSelectView(item.id);
-                          onClose();
+                          if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+                            onClose();
+                          }
                         }}
                       >
                         <span className="nav-icon">{item.icon}</span>
