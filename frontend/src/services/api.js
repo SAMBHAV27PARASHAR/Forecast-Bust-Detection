@@ -4,7 +4,7 @@
  */
 
 const API_BASE = import.meta.env?.VITE_API_BASE || (
-  typeof window !== 'undefined' && window.location.hostname === 'localhost'
+  typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? '/api'
     : 'https://forecast-bust-backend.onrender.com/api'
 );

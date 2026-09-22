@@ -210,3 +210,40 @@ def test_api_endpoint_lead_hours():
     assert data["lead_hours"] == 144
     assert data["stability_status"] == "STABLE"
     assert data["delta_bust_probability_pp"] == 3.0
+
+
+def test_stability_live_gefs_operational_cycles():
+    """Test operational GEFS consecutive comparison when available and clean awaiting state when not."""
+    # With consecutive cycles present:
+    res_d1 = intelligence_service.get_forecast_stability(
+        region_id="IND-NW-HIM",
+        day=1,
+        scenario_id="live_gefs",
+        valid_hour=0
+    )
+    assert res_d1["has_previous_run"] is True
+    assert res_d1["previous_run"] is not None
+    assert res_d1["current_run"] is not None
+    assert res_d1["previous_run"]["valid_time_utc"] == res_d1["current_run"]["valid_time_utc"]
+    assert res_d1["stability_status"] in ["STABLE", "MODERATE_VARIATION", "UNSTABLE_FLIP_FLOP"]
+    assert len(res_d1["main_variables_responsible"]) == 8
+
+    # When preceding cycle is unavailable (single operational cycle active):
+    from app.services.live_gefs_service import live_gefs_service
+    orig_prev = live_gefs_service.prev_live_data
+    try:
+        live_gefs_service.prev_live_data = None
+        res_single = intelligence_service.get_forecast_stability(
+            region_id="IND-NW-HIM",
+            day=5,
+            scenario_id="live_gefs",
+            valid_hour=0
+        )
+        assert res_single["has_previous_run"] is False
+        assert res_single["previous_run"] is None
+        assert res_single["current_run"] is not None
+        assert res_single["current_run"]["lead_time_days"] == 5
+        assert res_single["stability_status"] == "INSUFFICIENT_DATA"
+    finally:
+        live_gefs_service.prev_live_data = orig_prev
+

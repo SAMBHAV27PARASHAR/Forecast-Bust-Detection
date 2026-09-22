@@ -15,31 +15,48 @@ export default function NwpPredictabilityView({
   const [activeCurve, setActiveCurve] = useState(propCurveData);
   const [curveLoading, setCurveLoading] = useState(false);
 
-  // Sync active curve if external prop changes and no local fetch is active
+  // Automatically fetch fresh curve whenever selectedRegionId changes
   useEffect(() => {
-    if (propCurveData) {
-      setActiveCurve(propCurveData);
-    }
-  }, [propCurveData]);
-
-  // Dynamically re-fetch curve whenever selectedRegionId changes
-  const handleRegionChange = async (newRegionId) => {
-    if (setSelectedRegionId) setSelectedRegionId(newRegionId);
-    setCurveLoading(true);
-    try {
-      const freshCurve = await fetchLeadTimeCurve(newRegionId, 'live_gefs');
-      if (freshCurve && freshCurve.curve) {
-        setActiveCurve(freshCurve);
+    if (!selectedRegionId) return;
+    let isMounted = true;
+    async function loadCurve() {
+      setCurveLoading(true);
+      try {
+        const freshCurve = await fetchLeadTimeCurve(selectedRegionId, 'live_gefs');
+        if (isMounted && freshCurve && freshCurve.curve) {
+          setActiveCurve(freshCurve);
+        }
+      } catch (err) {
+        console.warn('Could not fetch lead time curve for region:', selectedRegionId, err);
+      } finally {
+        if (isMounted) setCurveLoading(false);
       }
-    } catch (err) {
-      console.warn('Could not fetch lead time curve for region:', newRegionId, err);
-    } finally {
-      setCurveLoading(false);
     }
+    loadCurve();
+    return () => { isMounted = false; };
+  }, [selectedRegionId]);
+
+  const handleRegionChange = (newRegionId) => {
+    if (setSelectedRegionId) setSelectedRegionId(newRegionId);
   };
 
   const selectedRegion = regions.find(r => (r.id || r.region_id) === selectedRegionId);
   const regionName = selectedRegion?.name || selectedRegionDetail?.region?.name || 'Selected Subdivision';
+
+  // Compute dynamic metrics from actual active curve points
+  const points = activeCurve?.curve || [];
+  const p1_3 = points.filter(p => p.day >= 1 && p.day <= 3);
+  const p4_6 = points.filter(p => p.day >= 4 && p.day <= 6);
+  const p7_10 = points.filter(p => p.day >= 7 && p.day <= 10);
+
+  const calcMean = (pts, key) => pts.length ? Math.round(pts.reduce((s, p) => s + (p[key] || 0), 0) / pts.length) : null;
+
+  const shortConf = calcMean(p1_3, 'confidence_score');
+  const shortBust = calcMean(p1_3, 'bust_probability');
+  const medConf = calcMean(p4_6, 'confidence_score');
+  const medBust = calcMean(p4_6, 'bust_probability');
+  const extConf = calcMean(p7_10, 'confidence_score');
+  const extBust = calcMean(p7_10, 'bust_probability');
 
   return (
     <div className="view-container nwp-predictability-view">
@@ -97,7 +114,7 @@ export default function NwpPredictabilityView({
             Atmospheric initial conditions dominate. GEFS ensemble clustering is tight (&lt; 0.8σ spread). Numerical models exhibit high deterministic precision, and bust risk is low unless unpredicted mesoscale convective initiation occurs.
           </p>
           <div className="insight-metric-tag">
-            Typical Skill: <strong>85% – 97% Confidence</strong>
+            Typical Skill: <strong>{shortConf !== null ? `${shortConf}% Confidence (${shortBust}% Bust Risk)` : 'Calculating...'}</strong>
           </div>
         </div>
 
@@ -111,7 +128,7 @@ export default function NwpPredictabilityView({
             Non-linear perturbation growth and atmospheric bifurcation begin to dominate. Ensemble trajectories disperse. Forecast bust likelihood rises rapidly if monsoon low-pressure tracks or moisture convergence zones diverge.
           </p>
           <div className="insight-metric-tag">
-            Ensemble Bifurcation Window: <strong>60% – 85% Confidence</strong>
+            Ensemble Bifurcation Window: <strong>{medConf !== null ? `${medConf}% Confidence (${medBust}% Bust Risk)` : 'Calculating...'}</strong>
           </div>
         </div>
 
@@ -125,7 +142,7 @@ export default function NwpPredictabilityView({
             Deterministic ensemble members lose phase correlation. Probabilistic ensemble guidance remains useful for regional synoptic patterns, but single-point precipitation amounts suffer high bust rates (&gt;50%).
           </p>
           <div className="insight-metric-tag">
-            Probabilistic Only: <strong>18% – 60% Confidence</strong>
+            Probabilistic Only: <strong>{extConf !== null ? `${extConf}% Confidence (${extBust}% Bust Risk)` : 'Calculating...'}</strong>
           </div>
         </div>
       </div>

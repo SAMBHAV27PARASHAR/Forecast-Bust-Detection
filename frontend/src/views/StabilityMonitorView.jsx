@@ -66,42 +66,6 @@ export default function StabilityMonitorView({
         />
       </div>
 
-      {/* Operational Protocol & Threshold Guide — Only shown when comparison data exists */}
-      {stabilityData?.has_previous_run && (
-        <>
-          <div className="stability-guide-card">
-            <h3>Operational Stability Protocols & Decision Rules</h3>
-            <div className="protocol-grid">
-              <div className="protocol-item border-stable">
-                <span className="protocol-badge badge-stable">STABLE</span>
-                <h4>|Δ Bust Probability| &lt; 10%</h4>
-                <p>Consecutive runs show consistent ensemble clustering and trajectory agreement. High operational confidence for forecasters.</p>
-              </div>
-              <div className="protocol-item border-moderate">
-                <span className="protocol-badge badge-moderate">MODERATE FLIP-FLOP</span>
-                <h4>10% ≤ |Δ Bust Probability| &lt; 25%</h4>
-                <p>Model is adjusting synoptic timing or precipitation intensity. Forecasters should cross-reference multi-model ensembles.</p>
-              </div>
-              <div className="protocol-item border-severe">
-                <span className="protocol-badge badge-severe">SEVERE JUMP / FLIP-FLOP</span>
-                <h4>|Δ Bust Probability| ≥ 25%</h4>
-                <p>Sudden regime change or bifurcation detected in consecutive cycles. High probability of model forecast bust. Alert issued.</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Next Step Banner */}
-          <div className="next-steps-banner">
-            <div>
-              <h4>Curious what caused the difference between these two runs?</h4>
-              <p>Inspect the "What Changed?" panel for physical feature attribution and atmospheric parameter deltas.</p>
-            </div>
-            <button className="btn-primary" onClick={() => onNavigateView('what_changed')}>
-              Inspect "What Changed?" 🔄
-            </button>
-          </div>
-        </>
-      )}
     </div>
   );
 }

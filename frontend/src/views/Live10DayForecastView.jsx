@@ -170,30 +170,45 @@ export default function Live10DayForecastView({
   // ── Active day slice from 10-day operational timeline ─────────────────────
   const activeDayDetail = useMemo(() => {
     if (!subdivisionDetail) return null;
-    if (Array.isArray(subdivisionDetail.ten_day_forecast)) {
-      const found = subdivisionDetail.ten_day_forecast.find(item => item.day === selectedDay);
+    const list = subdivisionDetail.ten_day_forecast || subdivisionDetail.ten_day_trend || [];
+    if (Array.isArray(list) && list.length > 0) {
+      const found = list.find(item => Number(item.day) === Number(selectedDay));
       if (found) {
         return {
           ...subdivisionDetail,
           ...found,
-          temperature: found.temp_c ?? found.temp_degc ?? subdivisionDetail.temperature,
-          rainfall: found.precip_mm ?? subdivisionDetail.rainfall,
-          humidity: found.rh_pct ?? found.rh_850 ?? subdivisionDetail.humidity,
-          wind_speed: found.wind_speed_kmh ?? subdivisionDetail.wind_speed,
-          pressure: found.mslp_hpa ?? subdivisionDetail.pressure,
+          temperature: found.temperature ?? found.temp_c ?? found.temp_degc ?? subdivisionDetail.temperature,
+          rainfall: found.rainfall ?? found.precip_mm ?? subdivisionDetail.rainfall,
+          humidity: found.humidity ?? found.rh_pct ?? found.rh_850 ?? subdivisionDetail.humidity,
+          wind_speed: found.wind_speed ?? found.wind_speed_kmh ?? subdivisionDetail.wind_speed,
+          pressure: found.pressure ?? found.mslp_hpa ?? subdivisionDetail.pressure,
           cape_j_kg: found.cape_j_kg ?? subdivisionDetail.cape_j_kg,
-          wind_shear: found.wind_shear_ms ?? subdivisionDetail.wind_shear,
+          wind_shear: found.wind_shear ?? found.wind_shear_ms ?? subdivisionDetail.wind_shear,
           ensemble_spread: found.ensemble_spread ?? subdivisionDetail.ensemble_spread,
           bust_probability: found.bust_probability ?? subdivisionDetail.bust_probability,
-          confidence: found.model_confidence ?? found.confidence_score ?? subdivisionDetail.confidence
+          confidence: found.confidence ?? found.model_confidence ?? found.confidence_score ?? subdivisionDetail.confidence,
+          risk_level: found.risk_level ?? subdivisionDetail.risk_level
         };
       }
     }
     return subdivisionDetail;
   }, [subdivisionDetail, selectedDay]);
 
+  // ── Active city day slice from city 10-day operational series ──────────────
+  const activeCityDayForecast = useMemo(() => {
+    if (!cityForecast) return null;
+    const list = cityForecast.ten_day_forecast || cityForecast.ten_day_trend || [];
+    if (Array.isArray(list) && list.length > 0) {
+      const found = list.find(item => Number(item.day) === Number(selectedDay));
+      if (found) return { ...cityForecast, ...found };
+    }
+    return cityForecast.current_step || cityForecast;
+  }, [cityForecast, selectedDay]);
+
   // ── Derived metrics and risk badge ────────────────────────────────────────
-  const currentBustProb = cityForecast?.bust_probability ?? cityForecast?.current_step?.bust_probability ?? null;
+  const currentBustProb = (domainMode === 'city' ? activeCityDayForecast?.bust_probability : activeDayDetail?.bust_probability)
+    ?? cityForecast?.bust_probability
+    ?? null;
   const getRiskBadge = (prob) => {
     if (prob === null || prob === undefined) return { label: 'EVALUATING', cls: 'badge-bust-low' };
     if (prob >= 60) return { label: 'HIGH BUST RISK', cls: 'badge-bust-high' };
@@ -309,7 +324,11 @@ export default function Live10DayForecastView({
               <div className="hero-metric-tile">
                 <span className="tile-label">Temperature</span>
                 <span className="tile-value">
-                  {cityForecast?.temperature != null ? `${Number(cityForecast.temperature).toFixed(1)}°C` : cityLoading ? '—' : 'N/A'}
+                  {activeCityDayForecast?.temperature != null
+                    ? `${Number(activeCityDayForecast.temperature).toFixed(1)}°C`
+                    : activeCityDayForecast?.temp_c != null
+                    ? `${Number(activeCityDayForecast.temp_c).toFixed(1)}°C`
+                    : cityLoading ? '—' : 'N/A'}
                 </span>
                 <span className="tile-sub">2m Surface Air Temp (GEFS)</span>
               </div>
@@ -317,11 +336,15 @@ export default function Live10DayForecastView({
               <div className="hero-metric-tile">
                 <span className="tile-label">Precipitation</span>
                 <span className="tile-value text-precip">
-                  {cityForecast?.rainfall != null ? `${Number(cityForecast.rainfall).toFixed(1)} mm` : cityLoading ? '—' : 'N/A'}
+                  {activeCityDayForecast?.rainfall != null
+                    ? `${Number(activeCityDayForecast.rainfall).toFixed(1)} mm`
+                    : activeCityDayForecast?.precip_mm != null
+                    ? `${Number(activeCityDayForecast.precip_mm).toFixed(1)} mm`
+                    : cityLoading ? '—' : 'N/A'}
                 </span>
                 <span className="tile-sub">
-                  {cityForecast?.rainfall != null
-                    ? `Rate: ${(Number(cityForecast.rainfall) / 24.0).toFixed(2)} mm/h`
+                  {activeCityDayForecast?.rainfall != null
+                    ? `Rate: ${(Number(activeCityDayForecast.rainfall) / 24.0).toFixed(2)} mm/h`
                     : 'Accumulation forecast'}
                 </span>
               </div>
@@ -329,7 +352,13 @@ export default function Live10DayForecastView({
               <div className="hero-metric-tile">
                 <span className="tile-label">Humidity</span>
                 <span className="tile-value">
-                  {cityForecast?.humidity != null ? `${Number(cityForecast.humidity).toFixed(0)}%` : cityLoading ? '—' : 'N/A'}
+                  {activeCityDayForecast?.humidity != null
+                    ? `${Number(activeCityDayForecast.humidity).toFixed(0)}%`
+                    : activeCityDayForecast?.rh_pct != null
+                    ? `${Number(activeCityDayForecast.rh_pct).toFixed(0)}%`
+                    : activeCityDayForecast?.rh_850 != null
+                    ? `${Number(activeCityDayForecast.rh_850).toFixed(0)}%`
+                    : cityLoading ? '—' : 'N/A'}
                 </span>
                 <span className="tile-sub">Relative Humidity 850hPa</span>
               </div>
@@ -337,7 +366,11 @@ export default function Live10DayForecastView({
               <div className="hero-metric-tile">
                 <span className="tile-label">Wind Speed</span>
                 <span className="tile-value">
-                  {cityForecast?.wind_speed != null ? `${Number(cityForecast.wind_speed).toFixed(1)} km/h` : cityLoading ? '—' : 'N/A'}
+                  {activeCityDayForecast?.wind_speed != null
+                    ? `${Number(activeCityDayForecast.wind_speed).toFixed(1)} km/h`
+                    : activeCityDayForecast?.wind_speed_kmh != null
+                    ? `${Number(activeCityDayForecast.wind_speed_kmh).toFixed(1)} km/h`
+                    : cityLoading ? '—' : 'N/A'}
                 </span>
                 <span className="tile-sub">10m Operational Vector</span>
               </div>
@@ -345,7 +378,11 @@ export default function Live10DayForecastView({
               <div className="hero-metric-tile">
                 <span className="tile-label">Pressure (MSLP)</span>
                 <span className="tile-value font-mono">
-                  {cityForecast?.pressure != null ? `${Number(cityForecast.pressure).toFixed(1)} hPa` : cityLoading ? '—' : 'N/A'}
+                  {activeCityDayForecast?.pressure != null
+                    ? `${Number(activeCityDayForecast.pressure).toFixed(1)} hPa`
+                    : activeCityDayForecast?.mslp_hpa != null
+                    ? `${Number(activeCityDayForecast.mslp_hpa).toFixed(1)} hPa`
+                    : cityLoading ? '—' : 'N/A'}
                 </span>
                 <span className="tile-sub">Mean Sea Level Pressure</span>
               </div>
@@ -353,15 +390,31 @@ export default function Live10DayForecastView({
               <div className="hero-metric-tile">
                 <span className="tile-label">CAPE / Instability</span>
                 <span className="tile-value">
-                  {cityForecast?.cape_j_kg != null ? `${Number(cityForecast.cape_j_kg).toFixed(0)} J/kg` : cityLoading ? '—' : 'N/A'}
+                  {activeCityDayForecast?.cape_j_kg != null
+                    ? `${Number(activeCityDayForecast.cape_j_kg).toFixed(0)} J/kg`
+                    : cityLoading ? '—' : 'N/A'}
                 </span>
                 <span className="tile-sub">Convective Available Energy</span>
               </div>
 
               <div className="hero-metric-tile">
+                <span className="tile-label">Wind Shear</span>
+                <span className="tile-value font-mono">
+                  {activeCityDayForecast?.wind_shear != null
+                    ? `${Number(activeCityDayForecast.wind_shear).toFixed(1)} m/s`
+                    : activeCityDayForecast?.wind_shear_ms != null
+                    ? `${Number(activeCityDayForecast.wind_shear_ms).toFixed(1)} m/s`
+                    : cityLoading ? '—' : 'N/A'}
+                </span>
+                <span className="tile-sub">850–200 hPa Deep Shear</span>
+              </div>
+
+              <div className="hero-metric-tile">
                 <span className="tile-label">Ensemble Spread</span>
                 <span className="tile-value font-mono">
-                  {cityForecast?.ensemble_spread != null ? `${Number(cityForecast.ensemble_spread).toFixed(2)} σ` : cityLoading ? '—' : 'N/A'}
+                  {activeCityDayForecast?.ensemble_spread != null
+                    ? `${Number(activeCityDayForecast.ensemble_spread).toFixed(2)} σ`
+                    : cityLoading ? '—' : 'N/A'}
                 </span>
                 <span className="tile-sub">31-Member GEFS Dispersion</span>
               </div>
@@ -370,7 +423,11 @@ export default function Live10DayForecastView({
               <div className="hero-metric-tile bust-tile">
                 <span className="tile-label">Bust Probability</span>
                 <span className="tile-value text-bust">
-                  {currentBustProb != null ? `${Number(currentBustProb).toFixed(1)}%` : cityLoading ? '—' : 'N/A'}
+                  {activeCityDayForecast?.bust_probability != null
+                    ? `${Number(activeCityDayForecast.bust_probability).toFixed(1)}%`
+                    : currentBustProb != null
+                    ? `${Number(currentBustProb).toFixed(1)}%`
+                    : cityLoading ? '—' : 'N/A'}
                 </span>
                 <span className={`risk-status-pill ${riskBadge.cls}`}>
                   {riskBadge.label}
@@ -380,7 +437,11 @@ export default function Live10DayForecastView({
               <div className="hero-metric-tile">
                 <span className="tile-label">Model Confidence</span>
                 <span className="tile-value text-conf">
-                  {cityForecast?.confidence != null ? `${Number(cityForecast.confidence).toFixed(1)}%` : cityLoading ? '—' : 'N/A'}
+                  {activeCityDayForecast?.confidence != null
+                    ? `${Number(activeCityDayForecast.confidence).toFixed(1)}%`
+                    : activeCityDayForecast?.model_confidence != null
+                    ? `${Number(activeCityDayForecast.model_confidence).toFixed(1)}%`
+                    : cityLoading ? '—' : 'N/A'}
                 </span>
                 <span className="tile-sub">{cityForecast?.confidence_level || 'Calibrated RF Score'}</span>
               </div>
@@ -388,7 +449,7 @@ export default function Live10DayForecastView({
               <div className="hero-metric-tile">
                 <span className="tile-label">Risk Level</span>
                 <span className="tile-value" style={{ textTransform: 'capitalize' }}>
-                  {cityForecast?.risk_level || (cityLoading ? '—' : riskBadge.label)}
+                  {activeCityDayForecast?.risk_level || (cityLoading ? '—' : riskBadge.label)}
                 </span>
                 <span className="tile-sub">Reliability Classification</span>
               </div>
@@ -590,6 +651,14 @@ export default function Live10DayForecastView({
                 {activeDayDetail?.wind_shear != null ? `${Number(activeDayDetail.wind_shear).toFixed(1)} m/s` : subdivisionLoading ? '—' : 'N/A'}
               </span>
               <span className="tile-sub">850-200 hPa Deep Shear</span>
+            </div>
+
+            <div className="hero-metric-tile">
+              <span className="tile-label">Risk Level</span>
+              <span className="tile-value" style={{ textTransform: 'capitalize' }}>
+                {activeDayDetail?.risk_level || (subdivisionLoading ? '—' : riskBadge.label)}
+              </span>
+              <span className="tile-sub">Reliability Classification</span>
             </div>
           </div>
 

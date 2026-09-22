@@ -66,28 +66,6 @@ export default function WhatChangedView({
         />
       </div>
 
-      {/* Methodology Card & Next Steps — Only shown when valid comparison data exists */}
-      {whatChangedData?.has_previous_run && whatChangedData?.status !== 'INSUFFICIENT_DATA' && (
-        <>
-          <div className="attribution-methodology-card">
-            <h3>Attribution Methodology</h3>
-            <p>
-              The system computes the exact gradient of model output change across consecutive runs (Δy = y_current - y_previous) and decomposes it into individual feature contributions using Tree SHAP (SHapley Additive exPlanations). This identifies whether a risk spike was caused by increasing vertical wind shear, moisture surge at 850 hPa, or ensemble dispersion.
-            </p>
-          </div>
-
-          {/* Next Step Banner */}
-          <div className="next-steps-banner">
-            <div>
-              <h4>Check the full lead-time degradation curve</h4>
-              <p>Examine how forecast predictability decays over the full 10-day operational horizon.</p>
-            </div>
-            <button className="btn-primary" onClick={() => onNavigateView('nwp_predictability')}>
-              View NWP Predictability Curve 📉
-            </button>
-          </div>
-        </>
-      )}
     </div>
   );
 }

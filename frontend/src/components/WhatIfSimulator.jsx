@@ -28,7 +28,7 @@ export default function WhatIfSimulator({ onSimulationResult }) {
   };
 
   const handleRunSimulation = async (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     setLoading(true);
     try {
       const res = await postCustomPrediction(formData);
@@ -40,6 +40,10 @@ export default function WhatIfSimulator({ onSimulationResult }) {
       setLoading(false);
     }
   };
+
+  React.useEffect(() => {
+    handleRunSimulation();
+  }, []);
 
   return (
     <div className="simulator-drawer-card">

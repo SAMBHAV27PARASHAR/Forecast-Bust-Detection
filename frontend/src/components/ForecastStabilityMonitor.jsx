@@ -74,7 +74,7 @@ export default function ForecastStabilityMonitor({
               <span className={`card-badge ${statusBadge.class}`}>{statusBadge.label}</span>
             )}
             {!hasPrev && (
-              <span className="card-badge badge-status-insufficient">Single Operational Cycle Active</span>
+              <span className="card-badge badge-status-awaiting">Waiting for previous cycle</span>
             )}
           </div>
           <h3 className="card-title">Forecast Stability Monitor</h3>
@@ -200,31 +200,49 @@ export default function ForecastStabilityMonitor({
           )}
         </div>
       ) : (
-        /* Insufficient Comparison Data State */
-        <div className="stability-insufficient-box">
-          <div className="insufficient-header">
-            <span className="insufficient-icon">⚠️</span>
-            <div className="insufficient-text-wrap">
-              <h4>Insufficient Comparison Data</h4>
-              <p>{stabilityData?.message || 'Preceding operational forecast cycle only covers up to +240h and did not reach this valid forecast date.'}</p>
+        /* Compact Waiting for previous operational cycle State */
+        <div className="awaiting-cycle-box stability-awaiting-box">
+          <div className="awaiting-header">
+            <div className="awaiting-icon-badge">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <div className="awaiting-text-wrap">
+              <h4 className="awaiting-title">Waiting for previous operational cycle</h4>
+              <p className="awaiting-desc">
+                Run-to-run stability tracking monitors guidance consistency across consecutive NWP initialization cycles (00z, 06z, 12z, 18z) for the same valid forecast target.
+              </p>
             </div>
           </div>
 
           {currRun && (
-            <div className="single-run-info">
-              <span className="info-title">Active Operational Forecast State:</span>
-              <div className="single-run-details">
-                <span>Run: <strong>{currRun.init_time_utc}</strong></span>
-                <span>Lead: <strong>+{currRun.lead_hours}h</strong> (Day {currRun.lead_time_days})</span>
-                <span>Valid: <strong>{currRun.valid_time_utc}</strong></span>
-                <span>Bust Risk: <strong>{currRun.bust_probability}%</strong></span>
-                <span>Confidence: <strong>{currRun.confidence_score}%</strong></span>
+            <div className="awaiting-reference-card">
+              <div className="reference-card-header">
+                <span className="reference-tag">Current Operational Forecast</span>
+                <span className="reference-chip">{formatToIst(currRun.init_time_utc)}</span>
+              </div>
+              <div className="reference-metrics-row">
+                <div className="ref-metric-cell">
+                  <span className="ref-cell-label">Forecast Horizon</span>
+                  <span className="ref-cell-val">Day {currRun.lead_time_days ?? selectedDay} (+{currRun.lead_hours ?? (selectedDay * 24)}h)</span>
+                </div>
+                <div className="ref-metric-cell">
+                  <span className="ref-cell-label">Valid Target (IST)</span>
+                  <span className="ref-cell-val">{formatToIst(currRun.valid_time_utc)}</span>
+                </div>
+                <div className="ref-metric-cell">
+                  <span className="ref-cell-label">Bust Risk</span>
+                  <span className="ref-cell-val highlight-val">{currRun.bust_probability}%</span>
+                </div>
+                <div className="ref-metric-cell">
+                  <span className="ref-cell-label">Confidence</span>
+                  <span className="ref-cell-val">{currRun.confidence_score}%</span>
+                </div>
               </div>
             </div>
           )}
-          <div className="insufficient-footer-note">
-            <em>Note: Numerical NWP stability tracking strictly compares consecutive initialization runs targeting the exact same valid time. When a lead horizon exceeds previous cycle coverage, no synthetic placeholder is substituted.</em>
-          </div>
         </div>
       )}
     </div>

@@ -43,7 +43,7 @@ export default function App() {
 
   // Theme Management
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('sih26079_theme') || 'dark';
+    return localStorage.getItem('sih26079_theme') || 'light';
   });
 
   useEffect(() => {

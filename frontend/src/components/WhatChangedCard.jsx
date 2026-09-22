@@ -41,8 +41,8 @@ export default function WhatChangedCard({
         <div className="card-title-group">
           <div className="title-tag-row">
             <span className="card-badge purple-badge">Run-to-Run Attribution</span>
-            <span className={`card-badge ${isInsufficient ? 'badge-status-insufficient' : direction === 'increased' ? 'badge-status-unstable' : 'badge-status-stable'}`}>
-              {isInsufficient ? 'INSUFFICIENT_DATA' : direction === 'increased' ? 'Risk Increased' : direction === 'decreased' ? 'Risk Decreased' : 'Unchanged'}
+            <span className={`card-badge ${isInsufficient ? 'badge-status-awaiting' : direction === 'increased' ? 'badge-status-unstable' : 'badge-status-stable'}`}>
+              {isInsufficient ? 'Waiting for previous cycle' : direction === 'increased' ? 'Risk Increased' : direction === 'decreased' ? 'Risk Decreased' : 'Unchanged'}
             </span>
           </div>
           <h3 className="card-title">What Changed?</h3>
@@ -119,17 +119,48 @@ export default function WhatChangedCard({
           )}
         </div>
       ) : (
-        /* INSUFFICIENT DATA FALLBACK */
-        <div className="stability-insufficient-box what-changed-insufficient">
-          <div className="insufficient-header">
-            <span className="insufficient-icon">ℹ️</span>
-            <div className="insufficient-text-wrap">
-              <h4>INSUFFICIENT_DATA</h4>
-              <p>{whatChangedData?.message || 'A valid preceding forecast initialization run is unavailable for this region and horizon. Operating on a single reference cycle.'}</p>
+        /* Compact Waiting for previous operational cycle State */
+        <div className="awaiting-cycle-box what-changed-awaiting-box">
+          <div className="awaiting-header">
+            <div className="awaiting-icon-badge purple-icon-badge">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="23 4 23 10 17 10" />
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+              </svg>
+            </div>
+            <div className="awaiting-text-wrap">
+              <h4 className="awaiting-title">Waiting for previous operational cycle</h4>
+              <p className="awaiting-desc">
+                Physical feature attribution decomposes atmospheric parameter deltas between consecutive model cycles using Tree SHAP gradient tracking.
+              </p>
             </div>
           </div>
-          <div className="insufficient-footer-note">
-            <em>No synthetic or assumed values are substituted. Run-to-run attribution strictly requires multi-cycle NWP archive data.</em>
+
+          <div className="awaiting-reference-card">
+            <div className="reference-card-header">
+              <span className="reference-tag purple-tag">Attribution Baseline State</span>
+              <span className="reference-chip">{formatToIst(currInit || whatChangedData?.current_init || 'Current Operational Cycle')}</span>
+            </div>
+            <div className="reference-metrics-row">
+              <div className="ref-metric-cell">
+                <span className="ref-cell-label">Forecast Horizon</span>
+                <span className="ref-cell-val">Day {selectedDay} (+{selectedDay * 24}h)</span>
+              </div>
+              <div className="ref-metric-cell">
+                <span className="ref-cell-label">Target Region</span>
+                <span className="ref-cell-val">{regionName || 'Selected Region'}</span>
+              </div>
+              <div className="ref-metric-cell">
+                <span className="ref-cell-label">Baseline Bust Risk</span>
+                <span className="ref-cell-val highlight-val-purple">
+                  {currProb ?? whatChangedData?.current_bust_probability ?? 0}%
+                </span>
+              </div>
+              <div className="ref-metric-cell">
+                <span className="ref-cell-label">Attribution Engine</span>
+                <span className="ref-cell-val">Tree SHAP (8-Feature Gradient)</span>
+              </div>
+            </div>
           </div>
         </div>
       )}
