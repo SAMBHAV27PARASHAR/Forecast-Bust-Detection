@@ -26,25 +26,12 @@ export default function Header({
   return (
     <header className="app-header">
       <div className="header-left">
-        {/* Hamburger Menu Toggle Button (☰) */}
-        <button
-          className="hamburger-btn"
-          onClick={onToggleSidebar}
-          title="Toggle Navigation Menu (13 Views)"
-          aria-label="Toggle navigation menu"
-        >
-          <span className="hamburger-bar"></span>
-          <span className="hamburger-bar"></span>
-          <span className="hamburger-bar"></span>
-        </button>
-
         <div className="logo-badge">
           <svg className="weather-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
             <path d="M12 19v3" />
             <path d="m9 21 3 3 3-3" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span className="sih-tag">SIH 26079</span>
         </div>
 
         <div className="title-group">
