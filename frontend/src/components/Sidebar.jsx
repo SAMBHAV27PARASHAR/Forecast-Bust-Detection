@@ -37,7 +37,12 @@ export default function Sidebar({ isOpen, onClose, activeView, onSelectView, isL
       <aside className={`app-sidebar ${isOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
           <div className="sidebar-brand">
-            <img src="/foresight-ai-logo.svg" alt="ForeSight AI Logo" className="sidebar-logo-img" />
+            <img 
+              src="/foresight-ai-logo.jpg" 
+              alt="" 
+              aria-hidden="true" 
+              className="sidebar-logo-img" 
+            />
             <div className="brand-title">ForeSight AI</div>
           </div>
           <button 
