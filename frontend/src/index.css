@@ -230,6 +230,19 @@ body {
   border-radius: var(--radius-md);
 }
 
+.sidebar-logo-img,
+.sidebar-brand img {
+  width: 32px;
+  height: 32px;
+  max-width: 32px;
+  max-height: 32px;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  border-radius: 6px;
+}
+
 .weather-icon {
   width: 28px;
   height: 28px;
